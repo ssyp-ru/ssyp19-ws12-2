@@ -1,0 +1,6 @@
+*.user
+[Dd]ebug/
+[Bb]in/
+[Oo]bj/
+.idea/**/workspace.xml
+.idea/**/contentModel.xml

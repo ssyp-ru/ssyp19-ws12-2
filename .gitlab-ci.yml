@@ -1,0 +1,19 @@
+image: microsoft/dotnet:latest
+
+stages:
+  - build
+
+before_script:
+  - "dotnet restore"
+
+build:
+  artifacts:
+    name: "Binaries"
+
+    paths:
+      - "Ssyp.JsonDBEngine/bin/Release"
+
+  stage: build
+
+  script:
+    - "dotnet build -c Release"
