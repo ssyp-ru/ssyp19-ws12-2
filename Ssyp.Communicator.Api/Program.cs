@@ -21,15 +21,9 @@ namespace Ssyp.Communicator.Api
         }
 
         [CanBeNull]
-        internal static User GetUserByUserID(long userID)
-        {
-            return DataStorage.Users.Find(it => it.UserID == userID);
-        }
+        internal static User GetUserByUserID(long userID) => DataStorage.Users.Find(it => it.UserID == userID);
 
-        internal static bool HasUserWithUsedID(long userID)
-        {
-            return GetUserByUserID(userID) == null;
-        }
+        internal static bool HasUserWithUsedID(long userID) => GetUserByUserID(userID) == null;
 
         internal static bool HasUserWithApiKey(Guid apiKey)
         {
