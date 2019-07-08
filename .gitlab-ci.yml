@@ -1,4 +1,4 @@
-image: microsoft/dotnet:3.0.100
+image: microsoft/dotnet/core-nightly:latest
 
 stages:
   - build
