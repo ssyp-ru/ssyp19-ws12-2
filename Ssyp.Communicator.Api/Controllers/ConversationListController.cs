@@ -2,6 +2,7 @@
 using System.Linq;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Ssyp.Communicator.Common;
 
@@ -12,8 +13,10 @@ namespace Ssyp.Communicator.Api.Controllers
     internal sealed class ConversationListController : ControllerBase
     {
         [HttpPost]
-        public IActionResult Post([FromBody] [NotNull] string value)
+        public ActionResult Post([FromBody] [NotNull] string value)
         {
+            Program.Logger.LogDebug("Handling conversation/list request");
+
             var invalidResult =
                 this.VerifyRequest<ConversationListRequest>(
                     value ?? throw new ArgumentNullException(nameof(value)),
@@ -22,7 +25,9 @@ namespace Ssyp.Communicator.Api.Controllers
             if (invalidResult != null)
                 return invalidResult;
 
-            return Content(JsonConvert.SerializeObject(new ConversationListResponse(Program.DataStorage.Conversations
+            Program.Logger.LogDebug($"Parsed the request. Request: {request}");
+
+            var response = new ConversationListResponse(Program.DataStorage.Conversations
                 .Where(c =>
                     c.First.ApiKey.Equals(request.ApiKey) || c.Second.ApiKey.Equals(request.ApiKey))
                 .Select(c => new ConversationListResponse.Conversation(
@@ -32,7 +37,11 @@ namespace Ssyp.Communicator.Api.Controllers
                             new ConversationListResponse.Conversation.Message(m.Sender.UserID, m.Value,
                                 m.TimeStamp))
                         .ToList()))
-                .ToList())), "application/json");
+                .ToList());
+
+            Program.Logger.LogDebug($"Formed response. Response: {response}");
+
+            return Content(JsonConvert.SerializeObject(response), "application/json");
         }
     }
 }

@@ -12,7 +12,7 @@ namespace Ssyp.Communicator.Api.Controllers
     internal sealed class UserInfoController : ControllerBase
     {
         [HttpPost]
-        public IActionResult Post([FromBody] [NotNull] string value)
+        public ActionResult Post([FromBody] [NotNull] string value)
         {
             var invalidResult =
                 this.VerifyRequest<UserInfoRequest>(

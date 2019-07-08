@@ -30,7 +30,7 @@ namespace Ssyp.Communicator.Api
             else
                 app.UseHsts();
 
-            app.UseHttpsRedirection().UseMvc().UseAuthorization();
+            app.UseMvc().UseAuthorization();
         }
     }
 }

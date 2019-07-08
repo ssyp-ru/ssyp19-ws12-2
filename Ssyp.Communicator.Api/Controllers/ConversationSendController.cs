@@ -13,7 +13,7 @@ namespace Ssyp.Communicator.Api.Controllers
     internal sealed class ConversationSendController : ControllerBase
     {
         [HttpPost]
-        public IActionResult Post([FromBody] [NotNull] string value)
+        public ActionResult Post([FromBody] [NotNull] string value)
         {
             var invalidResult =
                 this.VerifyRequest<ConversationSendRequest>(value ?? throw new ArgumentNullException(nameof(value)),

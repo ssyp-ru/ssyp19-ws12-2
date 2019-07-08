@@ -8,7 +8,7 @@ namespace Ssyp.Communicator.Api
     internal static class Requests
     {
         [CanBeNull]
-        internal static IActionResult VerifyRequest<TCommunicatorRequest>(
+        internal static ActionResult VerifyRequest<TCommunicatorRequest>(
             [NotNull] this ControllerBase controllerBase,
             [NotNull] string value,
             [NotNull] out TCommunicatorRequest request) where TCommunicatorRequest : ICommunicatorRequest

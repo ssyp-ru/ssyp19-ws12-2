@@ -10,7 +10,7 @@ namespace Ssyp.Communicator.Api.Controllers
     internal sealed class UserUnregisterController : ControllerBase
     {
         [HttpPost]
-        public IActionResult Post([FromBody] [NotNull] string value)
+        public ActionResult Post([FromBody] [NotNull] string value)
         {
             var invalidResult = this.VerifyRequest<UserModifyRequest>(
                 value ?? throw new ArgumentNullException(nameof(value)),
