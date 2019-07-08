@@ -13,7 +13,7 @@ namespace Ssyp.Communicator.Api.Storage
 
         public override int GetHashCode() => ApiKey.GetHashCode();
 
-        public User([NotNull] string name, long userID, Guid apiKey)
+        public User([NotNull] string name, Guid userID, Guid apiKey)
         {
             Condition.Requires(name, nameof(name)).IsNotNull();
             Name = name;
@@ -23,7 +23,7 @@ namespace Ssyp.Communicator.Api.Storage
 
         public Guid ApiKey { get; }
 
-        public long UserID { get; }
+        public Guid UserID { get; }
 
         [NotNull] public string Name { get; set; }
 

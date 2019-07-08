@@ -24,6 +24,9 @@ namespace Ssyp.Communicator.Api.Controllers
             var sender = Program.GetUserByApiKey(request.ApiKey);
             var receiver = Program.GetUserByUserID(request.Receiver);
 
+            if (sender == null || receiver == null)
+                return BadRequest();
+
             var conversation =
                 Program.DataStorage.Conversations.Find(it => it.ContainsUser(sender) && it.ContainsUser(receiver));
 

@@ -22,9 +22,9 @@ namespace Ssyp.Communicator.Api
         internal static User GetUserByApiKey(Guid apiKey) => DataStorage.Users.Find(it => it.ApiKey.Equals(apiKey));
 
         [CanBeNull]
-        internal static User GetUserByUserID(long userID) => DataStorage.Users.Find(it => it.UserID == userID);
+        internal static User GetUserByUserID(Guid userID) => DataStorage.Users.Find(it => it.UserID.Equals(userID));
 
-        internal static bool HasUserWithUsedID(long userID) => GetUserByUserID(userID) == null;
+        internal static bool HasUserWithUsedID(Guid userID) => GetUserByUserID(userID) == null;
 
         internal static bool HasUserWithApiKey(Guid apiKey) => GetUserByApiKey(apiKey) == null;
 
@@ -35,7 +35,7 @@ namespace Ssyp.Communicator.Api
         {
             DataStorage = new DataStorage(new List<Conversation>(), new List<User>
             {
-                new User("Haimuke", 0, Guid.NewGuid())
+                new User("Haimuke", Guid.NewGuid(), Guid.NewGuid())
             });
 
             SaveData();

@@ -23,14 +23,14 @@ namespace Ssyp.Communicator.Common
         [Serializable]
         public sealed class Conversation
         {
-            public Conversation(long interlocutor, [NotNull] List<Message> messages)
+            public Conversation(Guid interlocutor, [NotNull] List<Message> messages)
             {
                 Condition.Requires(messages, nameof(messages)).IsNotNull();
                 Interlocutor = interlocutor;
                 Messages = messages;
             }
 
-            public long Interlocutor { get; }
+            public Guid Interlocutor { get; }
             [NotNull] public List<Message> Messages { get; }
 
             [NotNull]
@@ -40,11 +40,11 @@ namespace Ssyp.Communicator.Common
             [Serializable]
             public sealed class Message
             {
-                public long Sender;
+                public Guid Sender;
                 public long TimeStamp;
                 [NotNull] public string Value;
 
-                public Message(long sender, string value, long timeStamp)
+                public Message(Guid sender, string value, long timeStamp)
                 {
                     Condition.Requires(value, nameof(value)).IsNotNull();
                     Sender = sender;

@@ -6,13 +6,13 @@ namespace Ssyp.Communicator.Common
     [Serializable]
     public sealed class UserInfoRequest : ICommunicatorRequest
     {
-        public UserInfoRequest(Guid apiKey, long userId)
+        public UserInfoRequest(Guid apiKey, Guid userId)
         {
             ApiKey = apiKey;
             UserID = userId;
         }
 
-        public long UserID { get; set; }
+        public Guid UserID { get; set; }
         public Guid ApiKey { get; set; }
 
         [NotNull]

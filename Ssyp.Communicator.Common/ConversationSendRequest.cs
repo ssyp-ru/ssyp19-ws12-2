@@ -7,7 +7,7 @@ namespace Ssyp.Communicator.Common
     [Serializable]
     public sealed class ConversationSendRequest : ICommunicatorRequest
     {
-        public ConversationSendRequest(Guid apiKey, [NotNull] string message, long receiver)
+        public ConversationSendRequest(Guid apiKey, [NotNull] string message, Guid receiver)
         {
             Condition.Requires(message, nameof(message)).IsNotNull();
             ApiKey = apiKey;
@@ -16,7 +16,7 @@ namespace Ssyp.Communicator.Common
         }
 
         [NotNull] public string Message { get; set; }
-        public long Receiver { get; set; }
+        public Guid Receiver { get; set; }
         public Guid ApiKey { get; set; }
 
         [NotNull]
