@@ -8,25 +8,23 @@ namespace Ssyp.Communicator.Api
 {
     internal sealed class Startup
     {
-        internal void ConfigureServices([NotNull] IServiceCollection services)
+        public void ConfigureServices([NotNull] IServiceCollection services)
         {
-            Condition.Requires(services, "services").IsNotNull();
+            Condition.Requires(services, nameof(services)).IsNotNull();
             services.AddMvc().AddNewtonsoftJson();
         }
 
-        internal void Configure([NotNull] IApplicationBuilder app, [NotNull] IHostingEnvironment env)
+        public void Configure([NotNull] IApplicationBuilder app, [NotNull] IHostingEnvironment env)
         {
-            Condition.Requires(app, "app").IsNotNull();
-            Condition.Requires(env, "env").IsNotNull();
+            Condition.Requires(app, nameof(app)).IsNotNull();
+            Condition.Requires(env, nameof(env)).IsNotNull();
 
             if (env.IsDevelopment())
                 app.UseDeveloperExceptionPage();
             else
                 app.UseHsts();
 
-            app.UseHttpsRedirection();
-            app.UseRouting(routes => { routes.MapApplication(); });
-            app.UseAuthorization();
+            app.UseHttpsRedirection().UseMvc().UseRouting(routes => { routes.MapApplication(); }).UseAuthorization();
         }
     }
 }

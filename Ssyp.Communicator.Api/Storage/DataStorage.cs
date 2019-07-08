@@ -16,9 +16,7 @@ namespace Ssyp.Communicator.Api.Storage
         [NotNull] internal List<User> Users { get; set; }
         [NotNull] internal List<Conversation> Conversations { get; set; }
 
-        public override string ToString()
-        {
-            return $"DataStorage(Users={Users}, Conversations={Conversations})";
-        }
+        public override string ToString() =>
+            $"{nameof(DataStorage)}({nameof(Users)}={Users}, {nameof(Conversations)}={Conversations})";
     }
 }

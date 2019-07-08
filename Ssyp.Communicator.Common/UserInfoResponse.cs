@@ -16,9 +16,6 @@ namespace Ssyp.Communicator.Common
         [NotNull] public string Name { get; set; }
 
         [NotNull]
-        public override string ToString()
-        {
-            return $"UserInfoResponse(Name={Name})";
-        }
+        public override string ToString() => $"{nameof(UserInfoResponse)}({nameof(Name)}={Name})";
     }
 }

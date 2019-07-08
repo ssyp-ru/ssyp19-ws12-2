@@ -14,8 +14,8 @@ namespace Ssyp.Communicator.Api.Controllers
         [HttpPost]
         public IActionResult Post([FromBody] [NotNull] string value)
         {
-            Condition.Requires(value, "value").IsNotNull();
-            var invalidResult = Requests.VerifyRequest<ConversationListRequest>(value, out var request);
+            Condition.Requires(value, nameof(value)).IsNotNull();
+            var invalidResult = this.VerifyRequest<ConversationListRequest>(value, out var request);
 
             if (invalidResult != null)
                 return invalidResult;

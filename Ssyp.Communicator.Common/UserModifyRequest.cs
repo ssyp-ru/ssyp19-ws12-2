@@ -9,7 +9,7 @@ namespace Ssyp.Communicator.Common
     {
         public UserModifyRequest(Guid apiKey, [NotNull] string name)
         {
-            Condition.Requires(name, "name").IsNotNull();
+            Condition.Requires(name, nameof(name)).IsNotNull();
             ApiKey = apiKey;
             Name = name;
         }
@@ -18,9 +18,7 @@ namespace Ssyp.Communicator.Common
         public Guid ApiKey { get; set; }
 
         [NotNull]
-        public override string ToString()
-        {
-            return $"UserModifyRequest(ApiKey={ApiKey}, Name={Name})";
-        }
+        public override string ToString() =>
+            $"{nameof(UserModifyRequest)}({nameof(ApiKey)}={ApiKey}, {nameof(Name)}={Name})";
     }
 }

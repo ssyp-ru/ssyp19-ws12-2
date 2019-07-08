@@ -9,8 +9,8 @@ namespace Ssyp.Communicator.Api.Storage
     {
         internal Message([NotNull] User sender, long timeStamp, [NotNull] string value)
         {
-            Condition.Requires(sender, "sender").IsNotNull();
-            Condition.Requires(value, "value").IsNotNull();
+            Condition.Requires(sender, nameof(sender)).IsNotNull();
+            Condition.Requires(value, nameof(value)).IsNotNull();
             Sender = sender;
             TimeStamp = timeStamp;
             Value = value;
@@ -21,9 +21,7 @@ namespace Ssyp.Communicator.Api.Storage
         [NotNull] internal string Value { get; set; }
 
         [NotNull]
-        public override string ToString()
-        {
-            return $"Message(Sender={Sender}, TimeStamp={TimeStamp}, Value={Value})";
-        }
+        public override string ToString() =>
+            $"{nameof(Message)}({nameof(Sender)}={Sender}, {nameof(TimeStamp)}={TimeStamp}, {nameof(Value)}={Value})";
     }
 }

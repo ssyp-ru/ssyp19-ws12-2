@@ -10,24 +10,22 @@ namespace Ssyp.Communicator.Common
     {
         public ConversationListResponse([NotNull] List<Conversation> conversations)
         {
-            Condition.Requires(conversations, "conversations").IsNotNull();
+            Condition.Requires(conversations, nameof(conversations)).IsNotNull();
             Conversations = conversations;
         }
 
         [NotNull] public List<Conversation> Conversations { get; }
 
         [NotNull]
-        public override string ToString()
-        {
-            return $"ConversationListResponse(Conversations={Conversations})";
-        }
+        public override string ToString() =>
+            $"${nameof(ConversationListResponse)}({nameof(Conversations)}={Conversations})";
 
         [Serializable]
         public sealed class Conversation
         {
             public Conversation(long interlocutor, [NotNull] List<Message> messages)
             {
-                Condition.Requires(messages, "messages").IsNotNull();
+                Condition.Requires(messages, nameof(messages)).IsNotNull();
                 Interlocutor = interlocutor;
                 Messages = messages;
             }
@@ -36,10 +34,8 @@ namespace Ssyp.Communicator.Common
             [NotNull] public List<Message> Messages { get; }
 
             [NotNull]
-            public override string ToString()
-            {
-                return $"Conversation(Interlocutor={Interlocutor}, Messages={Messages}";
-            }
+            public override string ToString() =>
+                $"{nameof(Conversation)}({nameof(Interlocutor)}={Interlocutor}, {nameof(Messages)}={Messages}";
 
             [Serializable]
             public sealed class Message
@@ -50,17 +46,16 @@ namespace Ssyp.Communicator.Common
 
                 public Message(long sender, string value, long timeStamp)
                 {
-                    Condition.Requires(value, "value").IsNotNull();
+                    Condition.Requires(value, nameof(value)).IsNotNull();
                     Sender = sender;
                     Value = value;
                     TimeStamp = timeStamp;
                 }
 
                 [NotNull]
-                public override string ToString()
-                {
-                    return $"Message(Sender={Sender}, Value={Value}, TimeStamp={TimeStamp}";
-                }
+                public override string ToString() =>
+                    $"{nameof(Message)}({nameof(Sender)}={Sender}, {nameof(Value)}={Value}, " +
+                    $"{nameof(TimeStamp)}={TimeStamp}";
             }
         }
     }

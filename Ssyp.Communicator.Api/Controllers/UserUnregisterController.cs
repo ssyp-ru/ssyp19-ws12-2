@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using CuttingEdge.Conditions;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc;
@@ -6,9 +5,9 @@ using Ssyp.Communicator.Common;
 
 namespace Ssyp.Communicator.Api.Controllers
 {
-    [Route("user/modify")]
+    [Route("user/unregister")]
     [ApiController]
-    internal sealed class UserModifyController : ControllerBase
+    internal sealed class UserUnregisterController : ControllerBase
     {
         [HttpPost]
         public IActionResult Post([FromBody] [NotNull] string value)
@@ -25,9 +24,7 @@ namespace Ssyp.Communicator.Api.Controllers
                 return BadRequest();
 
             var user = Program.GetUserByApiKey(key);
-            Debug.Assert(user != null, nameof(user) + " != null");
-            user.Name = request.Name;
-            Program.GetUserByApiKey(key);
+            Program.DataStorage.Users.Remove(user);
             return Ok();
         }
     }

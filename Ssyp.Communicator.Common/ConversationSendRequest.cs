@@ -9,7 +9,7 @@ namespace Ssyp.Communicator.Common
     {
         public ConversationSendRequest(Guid apiKey, [NotNull] string message, long receiver)
         {
-            Condition.Requires(message, "message").IsNotNull();
+            Condition.Requires(message, nameof(message)).IsNotNull();
             ApiKey = apiKey;
             Message = message;
             Receiver = receiver;
@@ -20,9 +20,8 @@ namespace Ssyp.Communicator.Common
         public Guid ApiKey { get; set; }
 
         [NotNull]
-        public override string ToString()
-        {
-            return $"ConversationSendRequest(ApiKey={ApiKey}, Message={Message}, Receuver={Receiver})";
-        }
+        public override string ToString() =>
+            $"{nameof(ConversationSendRequest)}({nameof(ApiKey)}={ApiKey}, {nameof(Message)}={Message}, " +
+            $"{nameof(Receiver)}={Receiver})";
     }
 }

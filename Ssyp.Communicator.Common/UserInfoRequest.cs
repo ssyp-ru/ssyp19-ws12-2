@@ -16,9 +16,7 @@ namespace Ssyp.Communicator.Common
         public Guid ApiKey { get; set; }
 
         [NotNull]
-        public override string ToString()
-        {
-            return $"UserInfoRequest(ApiKey={ApiKey}, UserID={UserID}";
-        }
+        public override string ToString() =>
+            $"{nameof(UserInfoRequest)}({nameof(ApiKey)}={ApiKey}, {nameof(UserID)}={UserID}";
     }
 }

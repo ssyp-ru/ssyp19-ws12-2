@@ -8,27 +8,27 @@ namespace Ssyp.Communicator.Api.Storage
     [Serializable]
     internal sealed class Conversation
     {
-        internal Conversation(User first, User second, [NotNull] List<Message> messages)
+        internal Conversation([NotNull] User first, [NotNull] User second, [NotNull] List<Message> messages)
         {
-            Condition.Requires(messages, "messages").IsNotNull();
+            Condition.Requires(messages, nameof(messages)).IsNotNull();
             First = first;
             Second = second;
             Messages = messages;
         }
 
-        internal User First { get; }
-        internal User Second { get; }
+        [NotNull] internal User First { get; }
+        [NotNull] internal User Second { get; }
 
         [NotNull] internal List<Message> Messages { get; }
 
-        public override string ToString()
-        {
-            return $"Conversation(First={First}, Second={Second})";
-        }
+        [NotNull]
+        public override string ToString() =>
+            $"{nameof(Conversation)}({nameof(First)}={First}, {nameof(Second)}={Second})";
 
-        internal bool ContainsUser(User user)
+        internal bool ContainsUser([NotNull] User user)
         {
-            return user.ApiKey.Equals(First.ApiKey) || user.ApiKey.Equals(Second.ApiKey);
+            Condition.Requires(user, nameof(user)).IsNotNull();
+            return user.Equals(First) || user.Equals(Second);
         }
     }
 }
