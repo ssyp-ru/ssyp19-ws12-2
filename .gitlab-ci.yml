@@ -11,7 +11,7 @@ build:
     name: "Binaries"
 
     paths:
-      - "Ssyp.JsonDBEngine/bin/Release"
+      - "Ssyp.Communicator.Api/bin/Release"
 
   stage: build
 
