@@ -1,17 +1,20 @@
 using System;
+using JetBrains.Annotations;
 
 namespace Ssyp.Communicator.Common
 {
     [Serializable]
-    public struct UserUnregisterRequest
+    public sealed class UserUnregisterRequest : ICommunicatorRequest
     {
-        public Guid ApiKey;
-
         public UserUnregisterRequest(Guid apiKey)
         {
             ApiKey = apiKey;
         }
 
+        public Guid ApiKey { get; set; }
+
+
+        [NotNull]
         public override string ToString()
         {
             return $"UserUnregisterRequest(ApiKey={ApiKey})";

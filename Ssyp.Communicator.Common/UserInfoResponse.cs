@@ -5,16 +5,17 @@ using JetBrains.Annotations;
 namespace Ssyp.Communicator.Common
 {
     [Serializable]
-    public struct UserInfoResponse
+    public sealed class UserInfoResponse
     {
-        [NotNull] public string Name;
-
         public UserInfoResponse([NotNull] string name)
         {
             Condition.Requires(name).IsNotNull();
             Name = name;
         }
 
+        [NotNull] public string Name { get; set; }
+
+        [NotNull]
         public override string ToString()
         {
             return $"UserInfoResponse(Name={Name})";

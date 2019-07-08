@@ -4,12 +4,9 @@ using JetBrains.Annotations;
 
 namespace Ssyp.Communicator.Common
 {
-    public struct ConversationSendRequest
+    [Serializable]
+    public sealed class ConversationSendRequest : ICommunicatorRequest
     {
-        public Guid ApiKey;
-        [NotNull] public string Message;
-        public long Receiver;
-
         public ConversationSendRequest(Guid apiKey, [NotNull] string message, long receiver)
         {
             Condition.Requires(message, "message").IsNotNull();
@@ -18,6 +15,11 @@ namespace Ssyp.Communicator.Common
             Receiver = receiver;
         }
 
+        [NotNull] public string Message { get; set; }
+        public long Receiver { get; set; }
+        public Guid ApiKey { get; set; }
+
+        [NotNull]
         public override string ToString()
         {
             return $"ConversationSendRequest(ApiKey={ApiKey}, Message={Message}, Receuver={Receiver})";

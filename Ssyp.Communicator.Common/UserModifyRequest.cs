@@ -5,11 +5,8 @@ using JetBrains.Annotations;
 namespace Ssyp.Communicator.Common
 {
     [Serializable]
-    public struct UserModifyRequest
+    public sealed class UserModifyRequest : ICommunicatorRequest
     {
-        public Guid ApiKey;
-        [NotNull] public string Name;
-
         public UserModifyRequest(Guid apiKey, [NotNull] string name)
         {
             Condition.Requires(name, "name").IsNotNull();
@@ -17,6 +14,10 @@ namespace Ssyp.Communicator.Common
             Name = name;
         }
 
+        [NotNull] public string Name { get; set; }
+        public Guid ApiKey { get; set; }
+
+        [NotNull]
         public override string ToString()
         {
             return $"UserModifyRequest(ApiKey={ApiKey}, Name={Name})";

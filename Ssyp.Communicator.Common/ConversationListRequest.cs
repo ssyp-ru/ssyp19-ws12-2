@@ -1,17 +1,19 @@
 using System;
+using JetBrains.Annotations;
 
 namespace Ssyp.Communicator.Common
 {
     [Serializable]
-    public struct ConversationListRequest
+    public sealed class ConversationListRequest : ICommunicatorRequest
     {
-        public Guid ApiKey;
-
         public ConversationListRequest(Guid apiKey)
         {
             ApiKey = apiKey;
         }
 
+        public Guid ApiKey { get; set; }
+
+        [NotNull]
         public override string ToString()
         {
             return $"ConversationListRequest(ApiKey={ApiKey}";

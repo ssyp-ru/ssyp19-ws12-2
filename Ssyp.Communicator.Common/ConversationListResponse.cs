@@ -6,27 +6,25 @@ using JetBrains.Annotations;
 namespace Ssyp.Communicator.Common
 {
     [Serializable]
-    public struct ConversationListResponse
+    public sealed class ConversationListResponse
     {
-        [NotNull] public List<Conversation> Conversations;
-
         public ConversationListResponse([NotNull] List<Conversation> conversations)
         {
             Condition.Requires(conversations, "conversations").IsNotNull();
             Conversations = conversations;
         }
 
+        [NotNull] public List<Conversation> Conversations { get; }
+
+        [NotNull]
         public override string ToString()
         {
             return $"ConversationListResponse(Conversations={Conversations})";
         }
 
         [Serializable]
-        public struct Conversation
+        public sealed class Conversation
         {
-            public long Interlocutor;
-            [NotNull] public List<Message> Messages;
-
             public Conversation(long interlocutor, [NotNull] List<Message> messages)
             {
                 Condition.Requires(messages, "messages").IsNotNull();
@@ -34,22 +32,21 @@ namespace Ssyp.Communicator.Common
                 Messages = messages;
             }
 
+            public long Interlocutor { get; }
+            [NotNull] public List<Message> Messages { get; }
+
+            [NotNull]
             public override string ToString()
             {
                 return $"Conversation(Interlocutor={Interlocutor}, Messages={Messages}";
             }
 
             [Serializable]
-            public struct Message
+            public sealed class Message
             {
                 public long Sender;
-                [NotNull] public string Value;
                 public long TimeStamp;
-
-                public override string ToString()
-                {
-                    return $"Message(Sender={Sender}, Value={Value}, TimeStamp={TimeStamp}";
-                }
+                [NotNull] public string Value;
 
                 public Message(long sender, string value, long timeStamp)
                 {
@@ -57,6 +54,12 @@ namespace Ssyp.Communicator.Common
                     Sender = sender;
                     Value = value;
                     TimeStamp = timeStamp;
+                }
+
+                [NotNull]
+                public override string ToString()
+                {
+                    return $"Message(Sender={Sender}, Value={Value}, TimeStamp={TimeStamp}";
                 }
             }
         }

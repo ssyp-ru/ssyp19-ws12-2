@@ -1,12 +1,44 @@
+using System;
+using System.Collections.Generic;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Ssyp.Communicator.Api.Storage;
 
 namespace Ssyp.Communicator.Api
 {
-    public static class Program
+    internal static class Program
     {
-        public static void Main(string[] args)
+        [NotNull] internal static DataStorage DataStorage { get; private set; }
+
+        [NotNull] internal static ILogger Logger { get; } = LoggerFactory.Create(it => { }).CreateLogger("common");
+
+        [CanBeNull]
+        internal static User GetUserByApiKey(Guid apiKey)
         {
+            return DataStorage.Users.Find(it => it.ApiKey.Equals(apiKey));
+        }
+
+        [CanBeNull]
+        internal static User GetUserByUserID(long userID)
+        {
+            return DataStorage.Users.Find(it => it.UserID == userID);
+        }
+
+        internal static bool HasUserWithUsedID(long userID)
+        {
+            return GetUserByUserID(userID) == null;
+        }
+
+        internal static bool HasUserWithApiKey(Guid apiKey)
+        {
+            return GetUserByApiKey(apiKey) == null;
+        }
+
+        internal static void Main(string[] args)
+        {
+            DataStorage = new DataStorage(new List<Conversation>(), new List<User>());
             CreateHostBuilder(args).Build().Run();
         }
 
