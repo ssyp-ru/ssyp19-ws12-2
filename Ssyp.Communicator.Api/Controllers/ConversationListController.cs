@@ -1,5 +1,5 @@
-﻿using System.Linq;
-using CuttingEdge.Conditions;
+﻿using System;
+using System.Linq;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -14,8 +14,10 @@ namespace Ssyp.Communicator.Api.Controllers
         [HttpPost]
         public IActionResult Post([FromBody] [NotNull] string value)
         {
-            Condition.Requires(value, nameof(value)).IsNotNull();
-            var invalidResult = this.VerifyRequest<ConversationListRequest>(value, out var request);
+            var invalidResult =
+                this.VerifyRequest<ConversationListRequest>(
+                    value ?? throw new ArgumentNullException(nameof(value)),
+                    out var request);
 
             if (invalidResult != null)
                 return invalidResult;

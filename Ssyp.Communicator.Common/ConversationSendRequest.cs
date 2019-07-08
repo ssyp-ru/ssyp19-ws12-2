@@ -1,5 +1,4 @@
 using System;
-using CuttingEdge.Conditions;
 using JetBrains.Annotations;
 
 namespace Ssyp.Communicator.Common
@@ -9,9 +8,8 @@ namespace Ssyp.Communicator.Common
     {
         public ConversationSendRequest(Guid apiKey, [NotNull] string message, Guid receiver)
         {
-            Condition.Requires(message, nameof(message)).IsNotNull();
             ApiKey = apiKey;
-            Message = message;
+            Message = message ?? throw new ArgumentNullException(nameof(message));
             Receiver = receiver;
         }
 

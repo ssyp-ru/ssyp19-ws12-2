@@ -1,4 +1,4 @@
-using CuttingEdge.Conditions;
+using System;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc;
 using Ssyp.Communicator.Common;
@@ -12,8 +12,9 @@ namespace Ssyp.Communicator.Api.Controllers
         [HttpPost]
         public IActionResult Post([FromBody] [NotNull] string value)
         {
-            Condition.Requires(value, nameof(value)).IsNotNull();
-            var invalidResult = this.VerifyRequest<UserModifyRequest>(value, out var request);
+            var invalidResult = this.VerifyRequest<UserModifyRequest>(
+                value ?? throw new ArgumentNullException(nameof(value)),
+                out var request);
 
             if (invalidResult != null)
                 return invalidResult;

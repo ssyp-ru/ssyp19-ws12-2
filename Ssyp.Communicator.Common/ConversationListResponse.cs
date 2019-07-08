@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using CuttingEdge.Conditions;
 using JetBrains.Annotations;
 
 namespace Ssyp.Communicator.Common
@@ -8,11 +7,8 @@ namespace Ssyp.Communicator.Common
     [Serializable]
     public sealed class ConversationListResponse
     {
-        public ConversationListResponse([NotNull] List<Conversation> conversations)
-        {
-            Condition.Requires(conversations, nameof(conversations)).IsNotNull();
-            Conversations = conversations;
-        }
+        public ConversationListResponse([NotNull] List<Conversation> conversations) => Conversations =
+            conversations ?? throw new ArgumentNullException(nameof(conversations));
 
         [NotNull] public List<Conversation> Conversations { get; }
 
@@ -25,9 +21,8 @@ namespace Ssyp.Communicator.Common
         {
             public Conversation(Guid interlocutor, [NotNull] List<Message> messages)
             {
-                Condition.Requires(messages, nameof(messages)).IsNotNull();
                 Interlocutor = interlocutor;
-                Messages = messages;
+                Messages = messages ?? throw new ArgumentNullException(nameof(messages));
             }
 
             public Guid Interlocutor { get; }
@@ -44,11 +39,10 @@ namespace Ssyp.Communicator.Common
                 public long TimeStamp;
                 [NotNull] public string Value;
 
-                public Message(Guid sender, string value, long timeStamp)
+                public Message(Guid sender, [NotNull] string value, long timeStamp)
                 {
-                    Condition.Requires(value, nameof(value)).IsNotNull();
                     Sender = sender;
-                    Value = value;
+                    Value = value ?? throw new ArgumentNullException(nameof(value));
                     TimeStamp = timeStamp;
                 }
 

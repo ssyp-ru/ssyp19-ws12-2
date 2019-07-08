@@ -1,5 +1,4 @@
 using System;
-using CuttingEdge.Conditions;
 using JetBrains.Annotations;
 
 namespace Ssyp.Communicator.Api.Storage
@@ -15,8 +14,7 @@ namespace Ssyp.Communicator.Api.Storage
 
         public User([NotNull] string name, Guid userID, Guid apiKey)
         {
-            Condition.Requires(name, nameof(name)).IsNotNull();
-            Name = name;
+            Name = name ?? throw new ArgumentNullException(nameof(name));
             UserID = userID;
             ApiKey = apiKey;
         }

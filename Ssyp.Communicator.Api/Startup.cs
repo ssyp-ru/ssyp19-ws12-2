@@ -1,4 +1,4 @@
-using CuttingEdge.Conditions;
+using System;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -10,21 +10,26 @@ namespace Ssyp.Communicator.Api
     {
         public void ConfigureServices([NotNull] IServiceCollection services)
         {
-            Condition.Requires(services, nameof(services)).IsNotNull();
+            if (services == null)
+                throw new ArgumentNullException(nameof(services));
+
             services.AddMvc(options => options.EnableEndpointRouting = false).AddNewtonsoftJson();
         }
 
         public void Configure([NotNull] IApplicationBuilder app, [NotNull] IHostingEnvironment env)
         {
-            Condition.Requires(app, nameof(app)).IsNotNull();
-            Condition.Requires(env, nameof(env)).IsNotNull();
+            if (app == null)
+                throw new ArgumentNullException(nameof(app));
+
+            if (env == null)
+                throw new ArgumentNullException(nameof(env));
 
             if (env.IsDevelopment())
                 app.UseDeveloperExceptionPage();
             else
                 app.UseHsts();
 
-            app.UseHttpsRedirection().UseMvc().UseRouting(routes => { routes.MapApplication(); }).UseAuthorization();
+            app.UseHttpsRedirection().UseMvc().UseAuthorization();
         }
     }
 }
