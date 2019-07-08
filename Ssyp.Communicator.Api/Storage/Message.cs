@@ -21,7 +21,8 @@ namespace Ssyp.Communicator.Api.Storage
         public override string ToString()
         {
             return
-                $"{nameof(Message)}({nameof(Sender)}={Sender}, {nameof(TimeStamp)}={TimeStamp}, {nameof(Value)}={Value})";
+                $"{nameof(Message)}({nameof(Sender)}={Sender}, {nameof(TimeStamp)}={TimeStamp}, " +
+                $"{nameof(Value)}={Value})";
         }
     }
 }

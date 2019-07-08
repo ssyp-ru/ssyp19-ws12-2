@@ -3,6 +3,7 @@ using JetBrains.Annotations;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace Ssyp.Communicator.Api
 {
@@ -16,7 +17,7 @@ namespace Ssyp.Communicator.Api
             services.AddMvc(options => options.EnableEndpointRouting = false).AddNewtonsoftJson();
         }
 
-        public void Configure([NotNull] IApplicationBuilder app, [NotNull] IHostingEnvironment env)
+        public void Configure([NotNull] IApplicationBuilder app, [NotNull] IWebHostEnvironment env)
         {
             if (app == null)
                 throw new ArgumentNullException(nameof(app));
