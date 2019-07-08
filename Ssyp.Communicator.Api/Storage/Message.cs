@@ -1,5 +1,4 @@
 using System;
-using CuttingEdge.Conditions;
 using JetBrains.Annotations;
 
 namespace Ssyp.Communicator.Api.Storage
@@ -9,11 +8,9 @@ namespace Ssyp.Communicator.Api.Storage
     {
         internal Message([NotNull] User sender, long timeStamp, [NotNull] string value)
         {
-            Condition.Requires(sender, nameof(sender)).IsNotNull();
-            Condition.Requires(value, nameof(value)).IsNotNull();
-            Sender = sender;
+            Sender = sender ?? throw new ArgumentNullException(nameof(sender));
             TimeStamp = timeStamp;
-            Value = value;
+            Value = value ?? throw new ArgumentNullException(nameof(value));
         }
 
         [NotNull] internal User Sender { get; }
@@ -21,7 +18,10 @@ namespace Ssyp.Communicator.Api.Storage
         [NotNull] internal string Value { get; set; }
 
         [NotNull]
-        public override string ToString() =>
-            $"{nameof(Message)}({nameof(Sender)}={Sender}, {nameof(TimeStamp)}={TimeStamp}, {nameof(Value)}={Value})";
+        public override string ToString()
+        {
+            return
+                $"{nameof(Message)}({nameof(Sender)}={Sender}, {nameof(TimeStamp)}={TimeStamp}, {nameof(Value)}={Value})";
+        }
     }
 }

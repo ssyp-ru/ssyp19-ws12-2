@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using CuttingEdge.Conditions;
 using JetBrains.Annotations;
 
 namespace Ssyp.Communicator.Api.Storage
@@ -10,10 +9,9 @@ namespace Ssyp.Communicator.Api.Storage
     {
         internal Conversation([NotNull] User first, [NotNull] User second, [NotNull] List<Message> messages)
         {
-            Condition.Requires(messages, nameof(messages)).IsNotNull();
-            First = first;
-            Second = second;
-            Messages = messages;
+            First = first ?? throw new ArgumentNullException(nameof(first));
+            Second = second ?? throw new ArgumentNullException(nameof(second));
+            Messages = messages ?? throw new ArgumentNullException(nameof(messages));
         }
 
         [NotNull] internal User First { get; }
@@ -22,12 +20,16 @@ namespace Ssyp.Communicator.Api.Storage
         [NotNull] internal List<Message> Messages { get; }
 
         [NotNull]
-        public override string ToString() =>
-            $"{nameof(Conversation)}({nameof(First)}={First}, {nameof(Second)}={Second})";
+        public override string ToString()
+        {
+            return $"{nameof(Conversation)}({nameof(First)}={First}, {nameof(Second)}={Second})";
+        }
 
         internal bool ContainsUser([NotNull] User user)
         {
-            Condition.Requires(user, nameof(user)).IsNotNull();
+            if (user == null)
+                throw new ArgumentNullException(nameof(user));
+
             return user.Equals(First) || user.Equals(Second);
         }
     }
