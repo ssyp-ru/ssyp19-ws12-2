@@ -71,18 +71,21 @@ namespace Ssyp.Communicator.Api
 
         internal static void Main([NotNull] string[] args)
         {
+            if (args == null)
+                throw new ArgumentNullException(nameof(args));
+
             if (!File.Exists(DataPath))
                 SaveDefaultData();
 
             PullData();
-            Condition.Requires(args, nameof(args)).IsNotNull();
             DataStorage = new DataStorage(new List<Conversation>(), new List<User>());
             CreateHostBuilder(args).Build().Run();
         }
 
         private static IHostBuilder CreateHostBuilder([NotNull] string[] args)
         {
-            Condition.Requires(args, nameof(args)).IsNotNull();
+            if (args == null)
+                throw new ArgumentNullException(nameof(args));
 
             return Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder => { webBuilder.UseStartup<Startup>(); });
