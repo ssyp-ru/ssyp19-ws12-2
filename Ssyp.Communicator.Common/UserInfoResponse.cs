@@ -1,5 +1,4 @@
 using System;
-using CuttingEdge.Conditions;
 using JetBrains.Annotations;
 
 namespace Ssyp.Communicator.Common
@@ -9,13 +8,15 @@ namespace Ssyp.Communicator.Common
     {
         public UserInfoResponse([NotNull] string name)
         {
-            Condition.Requires(name).IsNotNull();
-            Name = name;
+            Name = name ?? throw new ArgumentNullException(nameof(name));
         }
 
         [NotNull] public string Name { get; set; }
 
         [NotNull]
-        public override string ToString() => $"{nameof(UserInfoResponse)}({nameof(Name)}={Name})";
+        public override string ToString()
+        {
+            return $"{nameof(UserInfoResponse)}({nameof(Name)}={Name})";
+        }
     }
 }
