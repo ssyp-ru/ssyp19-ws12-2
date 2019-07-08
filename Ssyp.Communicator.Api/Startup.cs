@@ -11,7 +11,7 @@ namespace Ssyp.Communicator.Api
         public void ConfigureServices([NotNull] IServiceCollection services)
         {
             Condition.Requires(services, nameof(services)).IsNotNull();
-            services.AddMvc().AddNewtonsoftJson();
+            services.AddMvc(options => options.EnableEndpointRouting = false).AddNewtonsoftJson();
         }
 
         public void Configure([NotNull] IApplicationBuilder app, [NotNull] IHostingEnvironment env)
