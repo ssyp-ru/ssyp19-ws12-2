@@ -1,5 +1,4 @@
 using System;
-using CuttingEdge.Conditions;
 using JetBrains.Annotations;
 
 namespace Ssyp.Communicator.Common
@@ -9,16 +8,17 @@ namespace Ssyp.Communicator.Common
     {
         public UserModifyRequest(Guid apiKey, [NotNull] string name)
         {
-            Condition.Requires(name, nameof(name)).IsNotNull();
             ApiKey = apiKey;
-            Name = name;
+            Name = name ?? throw new ArgumentNullException(nameof(name));
         }
 
         [NotNull] public string Name { get; set; }
         public Guid ApiKey { get; set; }
 
         [NotNull]
-        public override string ToString() =>
-            $"{nameof(UserModifyRequest)}({nameof(ApiKey)}={ApiKey}, {nameof(Name)}={Name})";
+        public override string ToString()
+        {
+            return $"{nameof(UserModifyRequest)}({nameof(ApiKey)}={ApiKey}, {nameof(Name)}={Name})";
+        }
     }
 }
