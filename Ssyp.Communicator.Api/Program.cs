@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using CuttingEdge.Conditions;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
@@ -18,18 +17,34 @@ namespace Ssyp.Communicator.Api
 
         [NotNull] internal static ILogger Logger { get; } = LoggerFactory.Create(it => { }).CreateLogger("common");
 
-        [CanBeNull]
-        internal static User GetUserByApiKey(Guid apiKey) => DataStorage.Users.Find(it => it.ApiKey.Equals(apiKey));
+        private static string DataPath { get; } = Path.GetFullPath("C:/Users/Commander Tvis/Data.json");
 
         [CanBeNull]
-        internal static User GetUserByUserID(Guid userID) => DataStorage.Users.Find(it => it.UserID.Equals(userID));
+        internal static User GetUserByApiKey(Guid apiKey)
+        {
+            return DataStorage.Users.Find(it => it.ApiKey.Equals(apiKey));
+        }
 
-        internal static bool HasUserWithUsedID(Guid userID) => GetUserByUserID(userID) == null;
+        [CanBeNull]
+        internal static User GetUserByUserID(Guid userID)
+        {
+            return DataStorage.Users.Find(it => it.UserID.Equals(userID));
+        }
 
-        internal static bool HasUserWithApiKey(Guid apiKey) => GetUserByApiKey(apiKey) == null;
+        internal static bool HasUserWithUsedID(Guid userID)
+        {
+            return GetUserByUserID(userID) == null;
+        }
 
-        internal static void SaveData() =>
+        internal static bool HasUserWithApiKey(Guid apiKey)
+        {
+            return GetUserByApiKey(apiKey) == null;
+        }
+
+        internal static void SaveData()
+        {
             File.WriteAllText(DataPath, JsonConvert.SerializeObject(DataStorage), Encoding.UTF8);
+        }
 
         internal static void SaveDefaultData()
         {
@@ -53,8 +68,6 @@ namespace Ssyp.Communicator.Api
                 SaveDefaultData();
             }
         }
-
-        private static string DataPath { get; } = Path.GetFullPath("C:/Users/Commander Tvis/Data.json");
 
         internal static void Main([NotNull] string[] args)
         {
