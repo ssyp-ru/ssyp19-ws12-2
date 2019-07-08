@@ -13,8 +13,8 @@ namespace Ssyp.Communicator.Api.Storage
             Value = value ?? throw new ArgumentNullException(nameof(value));
         }
 
-        [NotNull] internal User Sender { get; }
-        internal long TimeStamp { get; }
+        [NotNull] internal User Sender { get; set; }
+        internal long TimeStamp { get; set; }
         [NotNull] internal string Value { get; set; }
 
         [NotNull]
