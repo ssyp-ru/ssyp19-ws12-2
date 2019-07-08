@@ -30,6 +30,7 @@ namespace Ssyp.Communicator.Api.Storage
             if (user == null)
                 throw new ArgumentNullException(nameof(user));
 
+
             return user.Equals(First) || user.Equals(Second);
         }
     }

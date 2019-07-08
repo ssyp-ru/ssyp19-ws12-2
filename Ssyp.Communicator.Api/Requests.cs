@@ -1,4 +1,3 @@
-using CuttingEdge.Conditions;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -14,8 +13,6 @@ namespace Ssyp.Communicator.Api
             [NotNull] string value,
             [NotNull] out TCommunicatorRequest request) where TCommunicatorRequest : ICommunicatorRequest
         {
-            Condition.Requires(controllerBase, nameof(controllerBase)).IsNotNull();
-            Condition.Requires(value, nameof(value)).IsNotNull();
             request = JsonConvert.DeserializeObject<TCommunicatorRequest>(value);
 
             if (request == null)
