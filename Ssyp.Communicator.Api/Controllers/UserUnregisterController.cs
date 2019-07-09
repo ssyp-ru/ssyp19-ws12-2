@@ -8,7 +8,7 @@ namespace Ssyp.Communicator.Api.Controllers
 {
     [Route("user/unregister")]
     [ApiController]
-    internal sealed class UserUnregisterController : ControllerBase
+    public sealed class UserUnregisterController : ControllerBase
     {
         [HttpPost]
         public ActionResult Post([FromBody] [NotNull] string value)
@@ -27,6 +27,7 @@ namespace Ssyp.Communicator.Api.Controllers
                 return BadRequest();
 
             var user = Program.GetUserByApiKey(key);
+            Debug.Assert(Program.DataStorage != null, "Program.DataStorage != null");
             Program.DataStorage.Users.Remove(user);
             return Ok();
         }

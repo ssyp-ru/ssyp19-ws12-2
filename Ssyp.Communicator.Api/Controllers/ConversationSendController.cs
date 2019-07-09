@@ -10,7 +10,7 @@ namespace Ssyp.Communicator.Api.Controllers
 {
     [Route("conversation/send")]
     [ApiController]
-    internal sealed class ConversationSendController : ControllerBase
+    public sealed class ConversationSendController : ControllerBase
     {
         [HttpPost]
         public ActionResult Post([FromBody] [NotNull] string value)

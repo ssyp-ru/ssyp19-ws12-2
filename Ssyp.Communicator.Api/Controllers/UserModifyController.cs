@@ -8,7 +8,7 @@ namespace Ssyp.Communicator.Api.Controllers
 {
     [Route("user/modify")]
     [ApiController]
-    internal sealed class UserModifyController : ControllerBase
+    public sealed class UserModifyController : ControllerBase
     {
         [HttpPost]
         public ActionResult Post([FromBody] [NotNull] string value)

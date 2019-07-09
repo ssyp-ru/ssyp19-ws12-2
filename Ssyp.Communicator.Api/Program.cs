@@ -1,35 +1,41 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Text;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Ssyp.Communicator.Api.Storage;
 
 namespace Ssyp.Communicator.Api
 {
-    internal static class Program
+    internal class Program
     {
-        [NotNull] internal static DataStorage DataStorage { get; private set; }
+        [CanBeNull] internal static DataStorage DataStorage { get; private set; }
+
+        [CanBeNull] private static IWebHost Host { get; set; }
 
         [NotNull]
-        internal static ILogger Logger { get; } =
-            LoggerFactory.Create(it => { it.AddConsole().AddDebug(); }).CreateLogger("common");
+        internal static ILogger Logger => Host?.Services.GetRequiredService<ILogger<Program>>() ??
+                                          throw new Exception("Logger accessed before Host was initialized");
 
         private static string DataPath { get; } = Path.GetFullPath("C:/Users/Commander Tvis/Data.json");
 
         [CanBeNull]
         internal static User GetUserByApiKey(Guid apiKey)
         {
+            Debug.Assert(DataStorage != null, nameof(DataStorage) + " != null");
             return DataStorage.Users.Find(it => it.ApiKey.Equals(apiKey));
         }
 
         [CanBeNull]
         internal static User GetUserByUserID(Guid userID)
         {
+            Debug.Assert(DataStorage != null, nameof(DataStorage) + " != null");
             return DataStorage.Users.Find(it => it.UserID.Equals(userID));
         }
 
@@ -82,21 +88,35 @@ namespace Ssyp.Communicator.Api
             if (args == null)
                 throw new ArgumentNullException(nameof(args));
 
+            Host = new WebHostBuilder()
+                .UseKestrel()
+                .UseContentRoot(Directory.GetCurrentDirectory())
+                .ConfigureAppConfiguration((context, builder) =>
+                {
+                    builder
+                        .AddJsonFile("appsettings.json", true, true)
+                        .AddJsonFile(
+                            $"appsettings.{context.HostingEnvironment.EnvironmentName}.json",
+                            true,
+                            true)
+                        .AddEnvironmentVariables();
+                })
+                .ConfigureLogging((context, builder) =>
+                    builder
+                        .AddConfiguration(context.Configuration.GetSection("Logging"))
+                        .AddConsole()
+                        .AddDebug()
+                        .AddEventSourceLogger())
+                .UseStartup<Startup>()
+                .Build();
+
             if (!File.Exists(DataPath))
                 SaveDefaultData();
 
             PullData();
             DataStorage = new DataStorage(new List<Conversation>(), new List<User>());
-            CreateHostBuilder(args).Build().Run();
-        }
 
-        private static IHostBuilder CreateHostBuilder([NotNull] string[] args)
-        {
-            if (args == null)
-                throw new ArgumentNullException(nameof(args));
-
-            return Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder => { webBuilder.UseStartup<Startup>(); });
+            Host.Run();
         }
     }
 }

@@ -9,7 +9,7 @@ namespace Ssyp.Communicator.Api.Controllers
 {
     [Route("user/info")]
     [ApiController]
-    internal sealed class UserInfoController : ControllerBase
+    public sealed class UserInfoController : ControllerBase
     {
         [HttpPost]
         public ActionResult Post([FromBody] [NotNull] string value)
