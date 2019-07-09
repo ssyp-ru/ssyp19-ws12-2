@@ -6,4 +6,8 @@
         <UseWPF>true</UseWPF>
     </PropertyGroup>
 
+    <ItemGroup>
+        <ProjectReference Include="..\Ssyp.Communicator.Common\Ssyp.Communicator.Common.csproj"/>
+    </ItemGroup>
+
 </Project>

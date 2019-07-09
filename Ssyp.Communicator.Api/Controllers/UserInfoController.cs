@@ -1,9 +1,9 @@
-using System;
 using System.Diagnostics;
-using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using Ssyp.Communicator.Common;
+using Ssyp.Communicator.Common.Requests;
+using Ssyp.Communicator.Common.Responses;
 
 namespace Ssyp.Communicator.Api.Controllers
 {
@@ -12,25 +12,31 @@ namespace Ssyp.Communicator.Api.Controllers
     public sealed class UserInfoController : ControllerBase
     {
         [HttpPost]
-        public ActionResult Post([FromBody] [NotNull] string value)
+        public IActionResult Post()
         {
-            var invalidResult =
-                this.VerifyRequest<UserInfoRequest>(
-                    value ?? throw new ArgumentNullException(nameof(value)),
-                    out var request);
+            Program.Logger.LogDebug("Handling user/info request");
+            var invalidResult = this.VerifyRequest<UserInfoRequest>(out var request);
 
             if (invalidResult != null)
                 return invalidResult;
 
+            Program.Logger.LogDebug($"Parsed the request. Request: {request}");
             Debug.Assert(request != null, nameof(request) + " != null");
-            var id = request.UserID;
+            var userGuidNullable = request.UserID.ToGuidOrNull();
 
-            if (!Program.HasUserWithUsedID(id))
+            if (!userGuidNullable.HasValue)
                 return BadRequest();
 
-            var user = Program.GetUserByUserID(request.UserID);
+            var userGuid = userGuidNullable.Value;
+
+            if (!Program.HasUserWithUsedID(userGuid))
+                return BadRequest();
+
+            var user = Program.GetUserByUserID(userGuid);
             Debug.Assert(user != null, nameof(user) + " != null");
-            return Content(JsonConvert.SerializeObject(new UserInfoResponse(user.Name)), "application/json");
+            var response = new UserInfoResponse(user.Name);
+            Program.Logger.LogDebug($"Formed the response. Response: {response}");
+            return Content(JsonConvert.SerializeObject(response), "application/json");
         }
     }
 }

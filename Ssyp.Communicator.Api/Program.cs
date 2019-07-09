@@ -61,7 +61,10 @@ namespace Ssyp.Communicator.Api
                 new List<Conversation>(),
                 new List<User>
                 {
-                    new User("Haimuke", Guid.NewGuid(), Guid.NewGuid())
+                    new User(
+                        "Haimuke",
+                        Guid.Parse("7CA67D53-BDC4-40E5-8AEC-BDDE579A76E5"),
+                        Guid.Parse("12D5A4A4-F225-4245-A2E5-EA76AB042712"))
                 });
 
             SaveData();

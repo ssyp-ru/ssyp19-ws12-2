@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using JetBrains.Annotations;
 
-namespace Ssyp.Communicator.Common
+namespace Ssyp.Communicator.Common.Responses
 {
     [Serializable]
     public sealed class ConversationListResponse
@@ -10,7 +10,7 @@ namespace Ssyp.Communicator.Common
         public ConversationListResponse([NotNull] List<Conversation> conversations) => Conversations =
             conversations ?? throw new ArgumentNullException(nameof(conversations));
 
-        [NotNull] public List<Conversation> Conversations { get; }
+        [NotNull] public IList<Conversation> Conversations { get; }
 
         [NotNull]
         public override string ToString() =>
@@ -19,14 +19,14 @@ namespace Ssyp.Communicator.Common
         [Serializable]
         public sealed class Conversation
         {
-            public Conversation(Guid interlocutor, [NotNull] List<Message> messages)
+            public Conversation(string interlocutor, [NotNull] IList<Message> messages)
             {
                 Interlocutor = interlocutor;
                 Messages = messages ?? throw new ArgumentNullException(nameof(messages));
             }
 
-            public Guid Interlocutor { get; }
-            [NotNull] public List<Message> Messages { get; }
+            public string Interlocutor { get; set; }
+            [NotNull] public IList<Message> Messages { get; set; }
 
             [NotNull]
             public override string ToString() =>
@@ -35,11 +35,11 @@ namespace Ssyp.Communicator.Common
             [Serializable]
             public sealed class Message
             {
-                public Guid Sender;
+                public string Sender;
                 public long TimeStamp;
                 [NotNull] public string Value;
 
-                public Message(Guid sender, [NotNull] string value, long timeStamp)
+                public Message(string sender, [NotNull] string value, long timeStamp)
                 {
                     Sender = sender;
                     Value = value ?? throw new ArgumentNullException(nameof(value));

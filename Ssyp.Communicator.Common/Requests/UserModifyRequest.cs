@@ -1,19 +1,19 @@
 using System;
 using JetBrains.Annotations;
 
-namespace Ssyp.Communicator.Common
+namespace Ssyp.Communicator.Common.Requests
 {
     [Serializable]
     public sealed class UserModifyRequest : ICommunicatorRequest
     {
-        public UserModifyRequest(Guid apiKey, [NotNull] string name)
+        public UserModifyRequest([NotNull] string apiKey, [NotNull] string name)
         {
-            ApiKey = apiKey;
+            ApiKey = apiKey ?? throw new ArgumentNullException(nameof(apiKey));
             Name = name ?? throw new ArgumentNullException(nameof(name));
         }
 
         [NotNull] public string Name { get; set; }
-        public Guid ApiKey { get; set; }
+        [NotNull] public string ApiKey { get; set; }
 
         [NotNull]
         public override string ToString()

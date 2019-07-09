@@ -1,12 +1,12 @@
 using System;
 using JetBrains.Annotations;
 
-namespace Ssyp.Communicator.Common
+namespace Ssyp.Communicator.Common.Requests
 {
     [Serializable]
     public sealed class ConversationSendRequest : ICommunicatorRequest
     {
-        public ConversationSendRequest(Guid apiKey, [NotNull] string message, Guid receiver)
+        public ConversationSendRequest(string apiKey, [NotNull] string message, string receiver)
         {
             ApiKey = apiKey;
             Message = message ?? throw new ArgumentNullException(nameof(message));
@@ -14,8 +14,8 @@ namespace Ssyp.Communicator.Common
         }
 
         [NotNull] public string Message { get; set; }
-        public Guid Receiver { get; set; }
-        public Guid ApiKey { get; set; }
+        public string Receiver { get; set; }
+        public string ApiKey { get; set; }
 
         [NotNull]
         public override string ToString() =>

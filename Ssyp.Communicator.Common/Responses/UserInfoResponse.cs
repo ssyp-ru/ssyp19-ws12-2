@@ -1,7 +1,7 @@
 using System;
 using JetBrains.Annotations;
 
-namespace Ssyp.Communicator.Common
+namespace Ssyp.Communicator.Common.Responses
 {
     [Serializable]
     public sealed class UserInfoResponse

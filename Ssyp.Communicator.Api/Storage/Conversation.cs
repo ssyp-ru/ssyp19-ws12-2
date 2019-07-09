@@ -14,10 +14,10 @@ namespace Ssyp.Communicator.Api.Storage
             Messages = messages ?? throw new ArgumentNullException(nameof(messages));
         }
 
-        [NotNull] internal User First { get; }
-        [NotNull] internal User Second { get; }
+        [NotNull] internal User First { get; set; }
+        [NotNull] internal User Second { get; set; }
 
-        [NotNull] internal List<Message> Messages { get; }
+        [NotNull] internal IList<Message> Messages { get; set; }
 
         [NotNull]
         public override string ToString()
