@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Ssyp.Communicator.Common.Requests;
 
@@ -51,7 +52,9 @@ namespace Ssyp.Communicator.Api
 
             apiKey = guidNullable.Value;
 
-            return !Program.HasUserWithApiKey(apiKey) ? controllerBase.Forbid() : null;
+            Program.Logger.LogDebug($"Matching user by key. Inputted: {apiKey}. All users: ");
+            Program.DataStorage.Users.ForEach(it => Program.Logger.LogDebug(it.ToString()));
+            return !Program.HasUserWithApiKey(apiKey) ? null : controllerBase.StatusCode(403);
         }
 
         [CanBeNull]

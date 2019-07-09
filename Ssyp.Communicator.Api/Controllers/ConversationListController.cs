@@ -28,7 +28,7 @@ namespace Ssyp.Communicator.Api.Controllers
                 .Where(c =>
                 {
                     Debug.Assert(request != null, nameof(request) + " != null");
-                    return c.First.ApiKey.Equals(apiKey) || c.Second.ApiKey.Equals(apiKey);
+                    return c.First.ApiKey == apiKey || c.Second.ApiKey == apiKey;
                 })
                 .Select(c =>
                 {

@@ -4,3 +4,7 @@
 [Oo]bj/
 .idea/**/workspace.xml
 .idea/**/contentModel.xml
+.idea/**/dictionaries/
+.idea/httpRequests
+.vs/
+

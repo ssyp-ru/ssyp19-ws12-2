@@ -7,17 +7,16 @@ namespace Ssyp.Communicator.Api.Storage
     [Serializable]
     internal sealed class Conversation
     {
-        internal Conversation([NotNull] User first, [NotNull] User second, [NotNull] List<Message> messages)
+        public Conversation([NotNull] User first, [NotNull] User second, [NotNull] List<Message> messages)
         {
             First = first ?? throw new ArgumentNullException(nameof(first));
             Second = second ?? throw new ArgumentNullException(nameof(second));
             Messages = messages ?? throw new ArgumentNullException(nameof(messages));
         }
 
-        [NotNull] internal User First { get; set; }
-        [NotNull] internal User Second { get; set; }
-
-        [NotNull] internal IList<Message> Messages { get; set; }
+        [NotNull] public User First { get; set; }
+        [NotNull] public User Second { get; set; }
+        [NotNull] public IList<Message> Messages { get; set; }
 
         [NotNull]
         public override string ToString()

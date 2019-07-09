@@ -15,7 +15,7 @@ namespace Ssyp.Communicator.Api
 {
     internal class Program
     {
-        [CanBeNull] internal static DataStorage DataStorage { get; private set; }
+        [NotNull] internal static DataStorage DataStorage { get; private set; } = SaveDefaultData();
 
         [CanBeNull] private static IWebHost Host { get; set; }
 
@@ -23,25 +23,25 @@ namespace Ssyp.Communicator.Api
         internal static ILogger Logger => Host?.Services.GetRequiredService<ILogger<Program>>() ??
                                           throw new Exception("Logger accessed before Host was initialized");
 
-        private static string DataPath { get; } = Path.GetFullPath("C:/Users/Commander Tvis/Data.json");
+        [NotNull] private static string DataPath => "C:/Users/Commander Tvis/Data.json";
 
         [CanBeNull]
         internal static User GetUserByApiKey(Guid apiKey)
         {
             Debug.Assert(DataStorage != null, nameof(DataStorage) + " != null");
-            return DataStorage.Users.Find(it => it.ApiKey.Equals(apiKey));
+            return DataStorage.Users.Find(it => it.ApiKey == apiKey);
         }
 
         [CanBeNull]
         internal static User GetUserByUserID(Guid userID)
         {
             Debug.Assert(DataStorage != null, nameof(DataStorage) + " != null");
-            return DataStorage.Users.Find(it => it.UserID.Equals(userID));
+            return DataStorage.Users.Find(it => it.UserID == userID);
         }
 
         internal static bool HasUserWithUsedID(Guid userID)
         {
-            return GetUserByUserID(userID) == null;
+            return GetUserByUserID(userID) != null;
         }
 
         internal static bool HasUserWithApiKey(Guid apiKey)
@@ -52,10 +52,9 @@ namespace Ssyp.Communicator.Api
         internal static void SaveData()
         {
             File.WriteAllText(DataPath, JsonConvert.SerializeObject(DataStorage), Encoding.UTF8);
-            Logger.LogDebug($"Updated data in {DataPath}");
         }
 
-        private static void SaveDefaultData()
+        private static DataStorage SaveDefaultData()
         {
             DataStorage = new DataStorage(
                 new List<Conversation>(),
@@ -68,7 +67,7 @@ namespace Ssyp.Communicator.Api
                 });
 
             SaveData();
-            Logger.LogDebug($"Saved default data. DataStorage: {DataStorage}");
+            return DataStorage;
         }
 
         private static void PullData()
@@ -77,10 +76,12 @@ namespace Ssyp.Communicator.Api
             {
                 DataStorage =
                     JsonConvert.DeserializeObject<DataStorage>(File.ReadAllText(DataPath, Encoding.UTF8));
-
-                Logger.LogDebug($"Pulled data from {DataPath}");
             }
             catch (JsonSerializationException)
+            {
+                SaveDefaultData();
+            }
+            catch (ArgumentNullException)
             {
                 SaveDefaultData();
             }
@@ -113,12 +114,7 @@ namespace Ssyp.Communicator.Api
                 .UseStartup<Startup>()
                 .Build();
 
-            if (!File.Exists(DataPath))
-                SaveDefaultData();
-
             PullData();
-            DataStorage = new DataStorage(new List<Conversation>(), new List<User>());
-
             Host.Run();
         }
     }
