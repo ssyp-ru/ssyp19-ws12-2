@@ -1,0 +1,25 @@
+﻿<Window x:Class="Ssyp.Communicator.ClientXaml.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Ssyp.Communicator.ClientXaml"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+
+    <DockPanel Uid="Root">
+        <StackPanel Orientation="Vertical" Uid="CurrentConversation">
+            <StackPanel Orientation="Vertical" Uid="Messages" />
+
+            <StackPanel Orientation="Horizontal">
+                <TextBox Uid="MessageToSend" />
+                <Button Uid="SendButton">Send</Button>
+            </StackPanel>
+        </StackPanel>
+
+        <StackPanel Orientation="Vertical" Uid="Conversations">
+            <TextBox Uid="NickToComposeTo" />
+            <Button Uid="ComposeButton">Compose</Button>
+        </StackPanel>
+    </DockPanel>
+</Window>

@@ -11,8 +11,14 @@ namespace Ssyp.Communicator.Api
         internal static ActionResult VerifyRequest<TCommunicatorRequest>(
             [NotNull] this ControllerBase controllerBase,
             [NotNull] string value,
-            [NotNull] out TCommunicatorRequest request) where TCommunicatorRequest : ICommunicatorRequest
+            [CanBeNull] out TCommunicatorRequest request) where TCommunicatorRequest : ICommunicatorRequest
         {
+            if (!controllerBase.Request.Headers["Content-Type"].Equals("application/json"))
+            {
+                request = default;
+                return controllerBase.BadRequest();
+            }
+
             request = JsonConvert.DeserializeObject<TCommunicatorRequest>(value);
 
             if (request == null)

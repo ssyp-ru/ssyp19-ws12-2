@@ -22,6 +22,7 @@ namespace Ssyp.Communicator.Api.Controllers
             if (invalidResult != null)
                 return invalidResult;
 
+            Debug.Assert(request != null, nameof(request) + " != null");
             var sender = Program.GetUserByApiKey(request.ApiKey);
             var receiver = Program.GetUserByUserID(request.Receiver);
 

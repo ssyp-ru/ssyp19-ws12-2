@@ -17,10 +17,9 @@ namespace Ssyp.Communicator.Api.Controllers
         {
             Program.Logger.LogDebug("Handling conversation/list request");
 
-            var invalidResult =
-                this.VerifyRequest<ConversationListRequest>(
-                    value ?? throw new ArgumentNullException(nameof(value)),
-                    out var request);
+            var invalidResult = this.VerifyRequest<ConversationListRequest>(
+                value ?? throw new ArgumentNullException(nameof(value)),
+                out var request);
 
             if (invalidResult != null)
                 return invalidResult;

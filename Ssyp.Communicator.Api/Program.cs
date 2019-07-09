@@ -15,7 +15,9 @@ namespace Ssyp.Communicator.Api
     {
         [NotNull] internal static DataStorage DataStorage { get; private set; }
 
-        [NotNull] internal static ILogger Logger { get; } = LoggerFactory.Create(it => { }).CreateLogger("common");
+        [NotNull]
+        internal static ILogger Logger { get; } =
+            LoggerFactory.Create(it => { it.AddConsole().AddDebug(); }).CreateLogger("common");
 
         private static string DataPath { get; } = Path.GetFullPath("C:/Users/Commander Tvis/Data.json");
 
@@ -44,24 +46,30 @@ namespace Ssyp.Communicator.Api
         internal static void SaveData()
         {
             File.WriteAllText(DataPath, JsonConvert.SerializeObject(DataStorage), Encoding.UTF8);
+            Logger.LogDebug($"Updated data in {DataPath}");
         }
 
-        internal static void SaveDefaultData()
+        private static void SaveDefaultData()
         {
-            DataStorage = new DataStorage(new List<Conversation>(), new List<User>
-            {
-                new User("Haimuke", Guid.NewGuid(), Guid.NewGuid())
-            });
+            DataStorage = new DataStorage(
+                new List<Conversation>(),
+                new List<User>
+                {
+                    new User("Haimuke", Guid.NewGuid(), Guid.NewGuid())
+                });
 
             SaveData();
+            Logger.LogDebug($"Saved default data. DataStorage: {DataStorage}");
         }
 
-        internal static void PullData()
+        private static void PullData()
         {
             try
             {
                 DataStorage =
                     JsonConvert.DeserializeObject<DataStorage>(File.ReadAllText(DataPath, Encoding.UTF8));
+
+                Logger.LogDebug($"Pulled data from {DataPath}");
             }
             catch (JsonSerializationException)
             {

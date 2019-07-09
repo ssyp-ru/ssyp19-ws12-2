@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc;
 using Ssyp.Communicator.Common;
@@ -19,6 +20,7 @@ namespace Ssyp.Communicator.Api.Controllers
             if (invalidResult != null)
                 return invalidResult;
 
+            Debug.Assert(request != null, nameof(request) + " != null");
             var key = request.ApiKey;
 
             if (!Program.HasUserWithApiKey(key))
