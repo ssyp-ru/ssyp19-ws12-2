@@ -22,13 +22,7 @@ namespace Ssyp.Communicator.Api.Controllers
 
             Debug.Assert(request != null, nameof(request) + " != null");
             var sender = Program.GetUserByApiKey(apiKey);
-
-            var receiverGuidNullable = request.Receiver.ToGuidOrNull();
-
-            if (!receiverGuidNullable.HasValue)
-                return BadRequest();
-
-            var receiver = Program.GetUserByUserID(receiverGuidNullable.Value);
+            var receiver = Program.GetUserByName(request.Receiver);
 
             if (receiver == null)
                 return BadRequest();
@@ -45,7 +39,7 @@ namespace Ssyp.Communicator.Api.Controllers
             if (conversation == null)
             {
                 Debug.Assert(sender != null, nameof(sender) + " != null");
-                conversation = new Conversation(sender, receiver, new List<Message>());
+                conversation = new Conversation(sender.Name, receiver.Name, new List<Message>());
                 Program.DataStorage.Conversations.Add(conversation);
             }
 

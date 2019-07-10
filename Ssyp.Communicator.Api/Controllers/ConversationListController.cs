@@ -2,7 +2,6 @@
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using Ssyp.Communicator.Common.Requests;
 using Ssyp.Communicator.Common.Responses;
 
@@ -28,24 +27,29 @@ namespace Ssyp.Communicator.Api.Controllers
                 .Where(c =>
                 {
                     Debug.Assert(request != null, nameof(request) + " != null");
-                    return c.First.ApiKey == apiKey || c.Second.ApiKey == apiKey;
+                    return Program.GetUserByName(c.First)?.ApiKey == apiKey ||
+                           Program.GetUserByName(c.Second)?.ApiKey == apiKey;
                 })
                 .Select(c =>
                 {
                     Debug.Assert(request != null, nameof(request) + " != null");
+                    var interlocutor = Program.GetUserByName(c.First);
+                    Debug.Assert(interlocutor != null, nameof(interlocutor) + " != null");
 
                     return new ConversationListResponse.Conversation(
-                        (c.First.ApiKey.ToString().Equals(request.ApiKey) ? c.First : c.Second).UserID.ToString(),
+                        (interlocutor.ApiKey.ToString().Equals(request.ApiKey)
+                            ? Program.GetUserByName(c.First)
+                            : Program.GetUserByName(c.Second))?.Name.ToString(),
                         c.Messages
                             .Select(m =>
-                                new ConversationListResponse.Conversation.Message(m.Sender.UserID.ToString(), m.Value,
+                                new ConversationListResponse.Conversation.Message(m.Sender.Name.ToString(), m.Value,
                                     m.TimeStamp))
                             .ToList());
                 })
                 .ToList());
 
             Program.Logger.LogDebug($"Formed the response. Response: {response}");
-            return Content(JsonConvert.SerializeObject(response), "application/json");
+            return response.CreateContent();
         }
     }
 }

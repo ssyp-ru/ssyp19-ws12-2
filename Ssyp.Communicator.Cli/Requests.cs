@@ -22,7 +22,7 @@ namespace Ssyp.Communicator.Cli
         internal static async Task<ConversationListResponse> RequestConversationList()
         {
             var task = Client
-                .PostAsync($"{ApiUriBase} ", new ConversationListRequest(ApiKey).CreateContent())
+                .PostAsync($"{ApiUriBase}conversation/list", new ConversationListRequest(ApiKey).CreateContent())
                 ?.ParseJsonAsync<ConversationListResponse>();
 
             if (task != null)
@@ -32,29 +32,34 @@ namespace Ssyp.Communicator.Cli
         }
 
         [CanBeNull]
-        internal static async Task<string> RequestUserName([NotNull] string userID)
+        internal static async Task<UserInfoOwnResponse> RequestUserInfoOwn()
         {
-            if (userID == null)
-                throw new ArgumentNullException(nameof(userID));
-
-            var task = RequestUserInfo(userID);
-            return task != null ? (await task).Name : null;
-        }
-
-        [CanBeNull]
-        internal static async Task<UserInfoResponse> RequestUserInfo([NotNull] string userID)
-        {
-            if (userID == null)
-                throw new ArgumentNullException(nameof(userID));
-
             var task = Client
-                .PostAsync($"{ApiUriBase} ", new UserInfoRequest(ApiKey, userID).CreateContent())
-                ?.ParseJsonAsync<UserInfoResponse>();
+                .PostAsync($"{ApiUriBase}/user/info/own", new UserInfoOwnRequest(ApiKey).CreateContent())
+                ?.ParseJsonAsync<UserInfoOwnResponse>();
 
             if (task != null)
                 return await task;
 
             return null;
+        }
+
+        [NotNull]
+        internal static async Task<bool> RequestConversionSend([NotNull] string receiver, [NotNull] string message)
+        {
+            return (await Client
+                    .PostAsync(
+                        $"{ApiUriBase}/conversation/send",
+                        new ConversationSendRequest(ApiKey, receiver, message).CreateContent()))
+                .IsSuccessStatusCode;
+        }
+
+        internal static async void RequestUserModify([NotNull] string name)
+        {
+            if (name == null)
+                throw new ArgumentNullException(nameof(name));
+
+            await Client.PostAsync($"{ApiUriBase}user/modify", new UserModifyRequest(ApiKey, name).CreateContent());
         }
 
         [NotNull]

@@ -33,20 +33,24 @@ namespace Ssyp.Communicator.Api
         }
 
         [CanBeNull]
-        internal static User GetUserByUserID(Guid userID)
+        internal static User GetUserByName([NotNull] string name)
         {
+            if (name == null)
+                throw new ArgumentNullException(nameof(name));
+
             Debug.Assert(DataStorage != null, nameof(DataStorage) + " != null");
-            return DataStorage.Users.Find(it => it.UserID == userID);
+            return DataStorage.Users.Find(it => it.Name == name);
         }
 
-        internal static bool HasUserWithUsedID(Guid userID)
+        internal static bool HasUserWithName([NotNull] string name)
         {
-            return GetUserByUserID(userID) != null;
+            if (name == null) throw new ArgumentNullException(nameof(name));
+            return GetUserByName(name) != null;
         }
 
         internal static bool HasUserWithApiKey(Guid apiKey)
         {
-            return GetUserByApiKey(apiKey) == null;
+            return GetUserByApiKey(apiKey) != null;
         }
 
         internal static void SaveData()
@@ -62,7 +66,6 @@ namespace Ssyp.Communicator.Api
                 {
                     new User(
                         "Haimuke",
-                        Guid.Parse("7CA67D53-BDC4-40E5-8AEC-BDDE579A76E5"),
                         Guid.Parse("12D5A4A4-F225-4245-A2E5-EA76AB042712"))
                 });
 

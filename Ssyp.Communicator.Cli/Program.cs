@@ -24,10 +24,9 @@ namespace Ssyp.Communicator.Cli
                 }
 
                 var commandWords = commandString.Split(' ').ToList();
-                var command = commandWords.GetOrNull(0);
                 var args = commandWords.DropAt(0);
 
-                switch (commandString)
+                switch (commandWords.GetOrNull(0))
                 {
                     case { } c when c.Equals("set-api-key", StringComparison.CurrentCultureIgnoreCase):
                         Console.WriteLine("Set");
@@ -48,11 +47,45 @@ namespace Ssyp.Communicator.Cli
                         Console.WriteLine("New API key set!");
                         break;
 
-                    case {} c when c.Equals("get-user-name"):
+
+                    case {} c when c.Equals("update-name"):
+                        var name = args.GetOrNull(0);
+
+                        if (name == null)
+                        {
+                            Console.WriteLine("Specify your new name!");
+                            break;
+                        }
+
+                        if (name.Length > 16)
+                            Console.WriteLine("The new name can't be too long!");
+
+                        Requests.RequestUserModify(name);
+                        break;
+
+                    case {} c when c.Equals("get-user-name", StringComparison.CurrentCultureIgnoreCase):
+                        Console.WriteLine($"Your name is {Requests.RequestUserInfoOwn()?.Result.Name}");
+                        break;
+
+                    case {} c when c.Equals("send", StringComparison.CurrentCultureIgnoreCase):
+                        var receiver = args.GetOrNull(0);
+                        var message = args.DropAt(0);
+
+                        if (receiver == null || message.IsEmpty())
+                        {
+                            Console.WriteLine("Specify receiver and non-empty message");
+                            break;
+                        }
+
+                        if (Requests.RequestConversionSend(receiver, message.JoinToString("")).Result)
+                            Console.WriteLine($"Y => {receiver}: {message}");
+                        else
+                            Console.WriteLine("Receiver not found or API key is invalid");
                         break;
 
                     default:
                         Console.WriteLine($"No command \"{commandString}\" available.");
+                        break;
                 }
             }
         }
@@ -70,10 +103,10 @@ namespace Ssyp.Communicator.Cli
                             ?.Result
                             .Conversations
                             .SelectMany(it => it.Messages)
-                            .Where(it => it.TimeStamp >= TimeUtilities.CurrentTimeMillis() + 2000)
+                            .Where(it => it.TimeStamp >= TimeUtilities.CurrentTimeMillis() - 2000)
                             .ToList()
                             .ForEach(it =>
-                                Console.WriteLine($"{Requests.RequestUserName(it.Sender)?.Result} => Y: {it.Value}"));
+                                Console.WriteLine($"{Requests.RequestUserInfoOwn()} => Y: {it.Value}"));
 
                         Thread.Sleep(2000);
                     }

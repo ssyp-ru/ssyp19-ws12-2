@@ -13,7 +13,7 @@ namespace Ssyp.Communicator.Common.Requests
         }
 
         [NotNull] public string Name { get; set; }
-        [NotNull] public string ApiKey { get; set; }
+        public string ApiKey { get; set; }
 
         [NotNull]
         public override string ToString()

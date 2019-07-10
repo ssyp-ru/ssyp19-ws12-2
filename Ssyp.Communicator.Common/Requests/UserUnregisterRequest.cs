@@ -9,7 +9,7 @@ namespace Ssyp.Communicator.Common.Requests
         public UserUnregisterRequest([NotNull] string apiKey) =>
             ApiKey = apiKey ?? throw new ArgumentNullException(nameof(apiKey));
 
-        [NotNull] public string ApiKey { get; set; }
+        public string ApiKey { get; set; }
 
         [NotNull]
         public override string ToString() => $"{nameof(UserUnregisterRequest)}({nameof(ApiKey)}={ApiKey})";
