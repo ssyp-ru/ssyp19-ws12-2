@@ -6,7 +6,8 @@ namespace Ssyp.Communicator.Common.Requests
     [Serializable]
     public sealed class ConversationListRequest : ICommunicatorRequest
     {
-        public ConversationListRequest(string apiKey) => ApiKey = apiKey;
+        public ConversationListRequest([NotNull] string apiKey) =>
+            ApiKey = apiKey ?? throw new ArgumentNullException(nameof(apiKey));
 
         public string ApiKey { get; set; }
 

@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ssyp.Communicator.Api", "Ss
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ssyp.Communicator.ClientXaml", "Ssyp.Communicator.ClientXaml\Ssyp.Communicator.ClientXaml.csproj", "{01C15F50-64FE-4723-A026-FEE41CBA43B5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ssyp.Communicator.Cli", "Ssyp.Communicator.Cli\Ssyp.Communicator.Cli.csproj", "{451B08F2-2601-4444-8FAC-91566EE17466}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{01C15F50-64FE-4723-A026-FEE41CBA43B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{01C15F50-64FE-4723-A026-FEE41CBA43B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{01C15F50-64FE-4723-A026-FEE41CBA43B5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{451B08F2-2601-4444-8FAC-91566EE17466}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{451B08F2-2601-4444-8FAC-91566EE17466}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{451B08F2-2601-4444-8FAC-91566EE17466}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{451B08F2-2601-4444-8FAC-91566EE17466}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
