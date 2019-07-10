@@ -15,7 +15,7 @@ namespace Ssyp.Communicator.Api.Controllers
         public IActionResult Post()
         {
             Program.Logger.LogDebug("Handling user/info request");
-            var invalidResult = this.VerifyRequest<UserInfoRequest>(out var request);
+            var invalidResult = this.VerifyRequest(out UserInfoRequest request);
 
             if (invalidResult != null)
                 return invalidResult;

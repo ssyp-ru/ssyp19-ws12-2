@@ -32,6 +32,16 @@ namespace Ssyp.Communicator.Cli
         }
 
         [CanBeNull]
+        internal static async Task<string> RequestUserName([NotNull] string userID)
+        {
+            if (userID == null)
+                throw new ArgumentNullException(nameof(userID));
+
+            var task = RequestUserInfo(userID);
+            return task != null ? (await task).Name : null;
+        }
+
+        [CanBeNull]
         internal static async Task<UserInfoResponse> RequestUserInfo([NotNull] string userID)
         {
             if (userID == null)

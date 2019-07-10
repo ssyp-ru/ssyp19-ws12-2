@@ -3,6 +3,7 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Ssyp.Communicator.Api.Storage;
 using Ssyp.Communicator.Common.Requests;
+using Ssyp.Communicator.Common.Utilities;
 
 namespace Ssyp.Communicator.Api.Controllers
 {
@@ -49,7 +50,7 @@ namespace Ssyp.Communicator.Api.Controllers
             }
 
             Debug.Assert(sender != null, nameof(sender) + " != null");
-            conversation.Messages.Add(new Message(sender, Stopwatch.GetTimestamp(), request.Message));
+            conversation.Messages.Add(new Message(sender, TimeUtilities.CurrentTimeMillis(), request.Message));
             Program.SaveData();
             return Ok();
         }

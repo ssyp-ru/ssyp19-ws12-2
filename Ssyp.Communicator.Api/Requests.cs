@@ -59,7 +59,23 @@ namespace Ssyp.Communicator.Api
 
         [CanBeNull]
         internal static IActionResult VerifyRequest<TCommunicatorRequest>([NotNull] this ControllerBase controllerBase,
-            [CanBeNull] out TCommunicatorRequest request) where TCommunicatorRequest : ICommunicatorRequest =>
-            controllerBase.VerifyRequest(out request, out _);
+            [CanBeNull] out TCommunicatorRequest request) where TCommunicatorRequest : ICommunicatorRequest
+        {
+            if (controllerBase == null)
+                throw new ArgumentNullException(nameof(controllerBase));
+
+            return controllerBase.VerifyRequest(out request, out _);
+        }
+
+        [CanBeNull]
+        internal static IActionResult VerifyRequest<TCommunicatorRequest>([NotNull] this ControllerBase controllerBase,
+            out Guid apiKey)
+            where TCommunicatorRequest : ICommunicatorRequest
+        {
+            if (controllerBase == null)
+                throw new ArgumentNullException(nameof(controllerBase));
+
+            return controllerBase.VerifyRequest<TCommunicatorRequest>(out _, out apiKey);
+        }
     }
 }
