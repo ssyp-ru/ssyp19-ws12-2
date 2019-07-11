@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using JetBrains.Annotations;
 
-namespace Ssyp.Communicator.Cli
+namespace Ssyp.Communicator.CommonClient
 {
-    internal static class IReadOnlyListExtensions
+    public static class ReadOnlyListExtensions
     {
-        internal static string JoinToString<T>([NotNull] this IReadOnlyList<T> source, [NotNull] string separator)
+        public static string JoinToString<T>([NotNull] this IReadOnlyList<T> source, [NotNull] string separator)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -22,28 +22,30 @@ namespace Ssyp.Communicator.Cli
             {
                 sb.Append(it);
 
-                if (i == source.ToList().Count - 1)
+                if (i != source.ToList().Count - 1)
                     sb.Append(separator);
             });
 
             return sb.ToString();
         }
 
-        internal static List<T> DropAt<T>([NotNull] this IReadOnlyList<T> source, int index)
+        public static List<T> Drop<T>([NotNull] this IReadOnlyList<T> source, int index)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
             var destination = new List<T>();
 
-            for (var i = source.Count - 1; i >= 0; i--)
+            source.ForEachIndexed((it, i) =>
+            {
                 if (i != index)
-                    destination.Add(source[0]);
+                    destination.Add(it);
+            });
 
             return destination;
         }
 
-        internal static T GetOrNull<T>([NotNull] this IReadOnlyList<T> source, int index) where T : class
+        public static T GetOrNull<T>([NotNull] this IReadOnlyList<T> source, int index) where T : class
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -51,27 +53,19 @@ namespace Ssyp.Communicator.Cli
             return source.Count >= index + 1 ? source[index] : null;
         }
 
-        internal static void ForEachIndexed<T>([NotNull] this IReadOnlyList<T> source, [NotNull] Action<T, int> action)
+        private static void ForEachIndexed<T>([NotNull] this IReadOnlyList<T> source, [NotNull] Action<T, int> action)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
             if (action == null)
                 throw new ArgumentNullException(nameof(action));
-
-            for (var i = source.Count - 1; i >= 0; i--)
+            
+            for (var i = 0; i < source.Count; i++)
             {
                 var element = source[i];
-                action(element, i);
+                action(element, i);   
             }
-        }
-
-        internal static bool IsEmpty<T>([NotNull] this IReadOnlyList<T> source)
-        {
-            if (source == null)
-                throw new ArgumentNullException(nameof(source));
-
-            return source.Count == 0;
         }
     }
 }

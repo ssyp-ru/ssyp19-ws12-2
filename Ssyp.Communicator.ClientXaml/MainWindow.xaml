@@ -8,18 +8,18 @@
         Title="MainWindow" Height="450" Width="800">
 
     <DockPanel Uid="Root">
-        <StackPanel Orientation="Vertical" Uid="CurrentConversation">
-            <StackPanel Orientation="Vertical" Uid="Messages" />
+        <StackPanel Orientation="Vertical" Name="CurrentConversation">
+            <StackPanel Orientation="Vertical" Name="Messages" />
 
             <StackPanel Orientation="Horizontal">
-                <TextBox Uid="MessageToSend" />
-                <Button Uid="SendButton">Send</Button>
+                <TextBox Name="MessageToSend" />
+                <Button Name="SendButton">Send</Button>
             </StackPanel>
         </StackPanel>
 
         <StackPanel Orientation="Vertical" Uid="Conversations">
-            <TextBox Uid="NickToComposeTo" />
-            <Button Uid="ComposeButton">Compose</Button>
+            <TextBox Name="NickToComposeTo" />
+            <Button Name="ComposeButton">Compose</Button>
         </StackPanel>
     </DockPanel>
 </Window>

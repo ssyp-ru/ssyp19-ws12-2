@@ -8,18 +8,18 @@ using Newtonsoft.Json;
 using Ssyp.Communicator.Common.Requests;
 using Ssyp.Communicator.Common.Responses;
 
-namespace Ssyp.Communicator.Cli
+namespace Ssyp.Communicator.CommonClient
 {
-    internal static class Requests
+    public static class Requests
     {
         [NotNull] private static HttpClient Client { get; } = new HttpClient();
 
-        [NotNull] internal static string ApiKey { get; set; } = Guid.Empty.ToString();
+        [NotNull] public static string ApiKey { private get; set; } = "12D5A4A4-F225-4245-A2E5-EA76AB042712";
 
         [NotNull] private static string ApiUriBase { get; } = "http://localhost:5000/";
 
         [CanBeNull]
-        internal static async Task<ConversationListResponse> RequestConversationList()
+        public static async Task<ConversationListResponse> RequestConversationList()
         {
             var task = Client
                 .PostAsync($"{ApiUriBase}conversation/list", new ConversationListRequest(ApiKey).CreateContent())
@@ -32,10 +32,10 @@ namespace Ssyp.Communicator.Cli
         }
 
         [CanBeNull]
-        internal static async Task<UserInfoOwnResponse> RequestUserInfoOwn()
+        public static async Task<UserInfoOwnResponse> RequestUserInfoOwn()
         {
             var task = Client
-                .PostAsync($"{ApiUriBase}/user/info/own", new UserInfoOwnRequest(ApiKey).CreateContent())
+                .PostAsync($"{ApiUriBase}user/info/own", new UserInfoOwnRequest(ApiKey).CreateContent())
                 ?.ParseJsonAsync<UserInfoOwnResponse>();
 
             if (task != null)
@@ -45,21 +45,23 @@ namespace Ssyp.Communicator.Cli
         }
 
         [NotNull]
-        internal static async Task<bool> RequestConversionSend([NotNull] string receiver, [NotNull] string message)
+        public static async Task<bool> RequestConversionSend([NotNull] string receiver, [NotNull] string message)
         {
             return (await Client
                     .PostAsync(
-                        $"{ApiUriBase}/conversation/send",
+                        $"{ApiUriBase}conversation/send",
                         new ConversationSendRequest(ApiKey, receiver, message).CreateContent()))
                 .IsSuccessStatusCode;
         }
 
-        internal static async void RequestUserModify([NotNull] string name)
+        [NotNull]
+        public static async Task<bool> RequestUserModify([NotNull] string name)
         {
             if (name == null)
                 throw new ArgumentNullException(nameof(name));
 
-            await Client.PostAsync($"{ApiUriBase}user/modify", new UserModifyRequest(ApiKey, name).CreateContent());
+            return (await Client.PostAsync($"{ApiUriBase}user/modify",
+                new UserModifyRequest(ApiKey, name).CreateContent())).IsSuccessStatusCode;
         }
 
         [NotNull]
@@ -67,7 +69,7 @@ namespace Ssyp.Communicator.Cli
         {
             if (request == null)
                 throw new ArgumentNullException(nameof(request));
-
+            
             return new StringContent(
                 JsonConvert.SerializeObject(request),
                 Encoding.UTF8,
@@ -82,7 +84,7 @@ namespace Ssyp.Communicator.Cli
 
             return !response.IsSuccessStatusCode
                 ? null
-                : JsonConvert.DeserializeObject<TResponse>(response.Content.ReadAsStringAsync().Result);
+                : JsonConvert.DeserializeObject<TResponse>(await response.Content.ReadAsStringAsync());
         }
     }
 }

@@ -19,7 +19,10 @@ namespace Ssyp.Communicator.Api.Storage
 
         public override bool Equals([CanBeNull] object obj) => obj is User other && Equals(other);
 
-        public override int GetHashCode() => ApiKey.GetHashCode();
+        public override int GetHashCode()
+        {
+            return ApiKey.GetHashCode();
+        }
 
         [NotNull]
         public override string ToString() =>

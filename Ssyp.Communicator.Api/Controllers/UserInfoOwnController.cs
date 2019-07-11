@@ -14,15 +14,18 @@ namespace Ssyp.Communicator.Api.Controllers
         [HttpPost]
         public IActionResult Post()
         {
-            Program.Logger.LogDebug("Handling user/info request");
-            var invalidResult = this.VerifyRequest<UserInfoOwnRequest>(out Guid apiKey);
+            Program.Logger.LogDebug("Handling user/info/own request");
+            var invalidResult = this.ProcessRequest<UserInfoOwnRequest>(out var request, out var apiKey);
 
             if (invalidResult != null)
                 return invalidResult;
+            
+            Program.Logger.LogDebug($"Parsed the request. Request: {request}");
 
             var user = Program.GetUserByApiKey(apiKey);
             Debug.Assert(user != null, nameof(user) + " != null");
-            var response = new UserInfoOwnResponse(user.Name.ToString(), user.Name);
+            var response = new UserInfoOwnResponse(user.Name);
+            Program.Logger.LogDebug($"Formed the response. Response: {response}");
             return response.CreateContent();
         }
     }

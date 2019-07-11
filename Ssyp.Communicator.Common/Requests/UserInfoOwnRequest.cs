@@ -11,6 +11,6 @@ namespace Ssyp.Communicator.Common.Requests
             ApiKey = apiKey ?? throw new ArgumentNullException(nameof(apiKey));
         }
 
-        [NotNull] public string ApiKey { get; set; }
+        public string ApiKey { get; set; }
     }
 }

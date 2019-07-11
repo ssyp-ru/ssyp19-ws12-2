@@ -7,10 +7,10 @@ namespace Ssyp.Communicator.Common.Responses
     [Serializable]
     public sealed class ConversationListResponse
     {
-        public ConversationListResponse([NotNull] IReadOnlyList<Conversation> conversations) => Conversations =
+        public ConversationListResponse([NotNull] List<Conversation> conversations) => Conversations =
             conversations ?? throw new ArgumentNullException(nameof(conversations));
 
-        [NotNull] public IReadOnlyList<Conversation> Conversations { get; }
+        [NotNull] public List<Conversation> Conversations { get; }
 
         [NotNull]
         public override string ToString() =>
@@ -19,14 +19,14 @@ namespace Ssyp.Communicator.Common.Responses
         [Serializable]
         public sealed class Conversation
         {
-            public Conversation(string interlocutor, [NotNull] IReadOnlyList<Message> messages)
+            public Conversation(string interlocutor, [NotNull] List<Message> messages)
             {
                 Interlocutor = interlocutor;
                 Messages = messages ?? throw new ArgumentNullException(nameof(messages));
             }
 
             public string Interlocutor { get; set; }
-            [NotNull] public IReadOnlyList<Message> Messages { get; set; }
+            [NotNull] public List<Message> Messages { get; set; }
 
             [NotNull]
             public override string ToString() =>

@@ -3,6 +3,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using Ssyp.Communicator.Common.Utilities;
+using Ssyp.Communicator.CommonClient;
 
 namespace Ssyp.Communicator.Cli
 {
@@ -10,7 +11,13 @@ namespace Ssyp.Communicator.Cli
     {
         private static void Main()
         {
-            StartMethodSync(out var messageSyncing);
+            var messageSyncing = MessageSyncing.StartMessageSyncing(
+                () => { Console.WriteLine("Stopping the syncing thread..."); },
+                it =>
+                {
+                    it.ToList().ForEach(
+                        m => Console.WriteLine($"{Requests.RequestUserInfoOwn()?.Result.Name} => Y: {m.Value}"));
+                });
 
             while (true)
             {
@@ -24,12 +31,11 @@ namespace Ssyp.Communicator.Cli
                 }
 
                 var commandWords = commandString.Split(' ').ToList();
-                var args = commandWords.DropAt(0);
+                var args = commandWords.Drop(0);
 
                 switch (commandWords.GetOrNull(0))
                 {
                     case { } c when c.Equals("set-api-key", StringComparison.CurrentCultureIgnoreCase):
-                        Console.WriteLine("Set");
                         var newApiKey = args.GetOrNull(0);
 
                         if (newApiKey == null)
@@ -48,7 +54,7 @@ namespace Ssyp.Communicator.Cli
                         break;
 
 
-                    case {} c when c.Equals("update-name"):
+                    case {} c when c.Equals("update-name", StringComparison.CurrentCultureIgnoreCase):
                         var name = args.GetOrNull(0);
 
                         if (name == null)
@@ -60,27 +66,57 @@ namespace Ssyp.Communicator.Cli
                         if (name.Length > 16)
                             Console.WriteLine("The new name can't be too long!");
 
-                        Requests.RequestUserModify(name);
+                        Console.WriteLine(Requests.RequestUserModify(name).Result
+                            ? $"You are {name} now!"
+                            : "API key is invalid or name can't be parsed");
+
                         break;
 
                     case {} c when c.Equals("get-user-name", StringComparison.CurrentCultureIgnoreCase):
-                        Console.WriteLine($"Your name is {Requests.RequestUserInfoOwn()?.Result.Name}");
+                        var response = Requests.RequestUserInfoOwn();
+
+                        Console.WriteLine(
+                            response?.Result == null
+                                ? "API key is invalid"
+                                : $"Your name is {response.Result?.Name}");
+
                         break;
 
                     case {} c when c.Equals("send", StringComparison.CurrentCultureIgnoreCase):
                         var receiver = args.GetOrNull(0);
-                        var message = args.DropAt(0);
+                        var message = args.Drop(0).JoinToString(" ");
+                        Console.WriteLine(receiver);
+                        Console.WriteLine(message);
 
-                        if (receiver == null || message.IsEmpty())
+                        if (receiver == null || message.Length == 0)
                         {
                             Console.WriteLine("Specify receiver and non-empty message");
                             break;
                         }
 
-                        if (Requests.RequestConversionSend(receiver, message.JoinToString("")).Result)
-                            Console.WriteLine($"Y => {receiver}: {message}");
-                        else
-                            Console.WriteLine("Receiver not found or API key is invalid");
+                        Console.WriteLine(Requests.RequestConversionSend(receiver, message).Result
+                            ? $"Y => {receiver}: {message}"
+                            : "Receiver not found or API key is invalid");
+
+                        break;
+
+                    case {} c when c.Equals("conversation", StringComparison.OrdinalIgnoreCase):
+                        var interlocutor = args.GetOrNull(0);
+
+                        if (interlocutor == null)
+                        {
+                            Console.WriteLine("Specify interlocutor");
+                            break;
+                        }
+
+                        Requests
+                            .RequestConversationList()
+                            ?.Result
+                            .Conversations
+                            .Find(it => it.Interlocutor.Equals(interlocutor))
+                            .Messages
+                            .ForEach(it => Console.WriteLine($"{it.Sender} - {it.Value}"));
+
                         break;
 
                     default:
@@ -88,37 +124,6 @@ namespace Ssyp.Communicator.Cli
                         break;
                 }
             }
-        }
-
-
-        private static void StartMethodSync(out Thread messageSyncing)
-        {
-            messageSyncing = new Thread(() =>
-            {
-                while (true)
-                {
-                    try
-                    {
-                        Requests.RequestConversationList()
-                            ?.Result
-                            .Conversations
-                            .SelectMany(it => it.Messages)
-                            .Where(it => it.TimeStamp >= TimeUtilities.CurrentTimeMillis() - 2000)
-                            .ToList()
-                            .ForEach(it =>
-                                Console.WriteLine($"{Requests.RequestUserInfoOwn()} => Y: {it.Value}"));
-
-                        Thread.Sleep(2000);
-                    }
-                    catch (ThreadAbortException)
-                    {
-                        Console.WriteLine("Stopping the syncing thread...");
-                        break;
-                    }
-                }
-            });
-
-            messageSyncing.Start();
         }
     }
 }

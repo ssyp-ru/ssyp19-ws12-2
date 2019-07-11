@@ -15,7 +15,7 @@ namespace Ssyp.Communicator.Api.Controllers
         public IActionResult Post()
         {
             Program.Logger.LogDebug("Handling conversation/list request");
-            var invalidResult = this.VerifyRequest<ConversationListRequest>(out var request, out var apiKey);
+            var invalidResult = this.ProcessRequest<ConversationListRequest>(out var request, out var apiKey);
 
             if (invalidResult != null)
                 return invalidResult;
@@ -27,6 +27,7 @@ namespace Ssyp.Communicator.Api.Controllers
                 .Where(c =>
                 {
                     Debug.Assert(request != null, nameof(request) + " != null");
+      
                     return Program.GetUserByName(c.First)?.ApiKey == apiKey ||
                            Program.GetUserByName(c.Second)?.ApiKey == apiKey;
                 })

@@ -7,7 +7,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Ssyp.Communicator.Common\Ssyp.Communicator.Common.csproj"/>
+        <ProjectReference Include="..\Ssyp.Communicator.CommonClient\Ssyp.Communicator.CommonClient.csproj" />
+        <ProjectReference Include="..\Ssyp.Communicator.Common\Ssyp.Communicator.Common.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="MaterialDesignThemes" Version="2.5.1" />
     </ItemGroup>
 
 </Project>

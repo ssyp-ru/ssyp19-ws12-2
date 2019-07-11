@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Ssyp.Communicator.Common.Requests;
 
 namespace Ssyp.Communicator.Api.Controllers
@@ -11,19 +12,17 @@ namespace Ssyp.Communicator.Api.Controllers
         [HttpPost]
         public IActionResult Post()
         {
-            var invalidResult = this.VerifyRequest<UserUnregisterRequest>(out var request, out var apiKey);
-
+            Program.Logger.LogDebug("Handling user/unregister request");
+            var invalidResult = this.ProcessRequest<UserUnregisterRequest>(out var request, out var apiKey);
+            Program.Logger.LogDebug($"Parsed the request. Request: {request}");
+            
             if (invalidResult != null)
                 return invalidResult;
 
             Debug.Assert(request != null, nameof(request) + " != null");
-
-            if (!Program.HasUserWithApiKey(apiKey))
-                return BadRequest();
-
             var user = Program.GetUserByApiKey(apiKey);
-            Debug.Assert(Program.DataStorage != null, "Program.DataStorage != null");
-            Program.DataStorage.Users.Remove(user);
+            Debug.Assert(user != null, nameof(user) + " != null");
+            Program.DeleteUser(user);
             return Ok();
         }
     }

@@ -23,7 +23,7 @@ namespace Ssyp.Communicator.Api
         internal static ILogger Logger => Host?.Services.GetRequiredService<ILogger<Program>>() ??
                                           throw new Exception("Logger accessed before Host was initialized");
 
-        [NotNull] private static string DataPath => "C:/Users/Commander Tvis/Data.json";
+        [NotNull] private static string DataPath => "C:/Users/Sergei/Data.json";
 
         [CanBeNull]
         internal static User GetUserByApiKey(Guid apiKey)
@@ -44,7 +44,9 @@ namespace Ssyp.Communicator.Api
 
         internal static bool HasUserWithName([NotNull] string name)
         {
-            if (name == null) throw new ArgumentNullException(nameof(name));
+            if (name == null)
+                throw new ArgumentNullException(nameof(name));
+
             return GetUserByName(name) != null;
         }
 
@@ -53,9 +55,50 @@ namespace Ssyp.Communicator.Api
             return GetUserByApiKey(apiKey) != null;
         }
 
+        internal static bool AddUser([NotNull] string name)
+        {
+            if (name == null) 
+                throw new ArgumentNullException(nameof(name));
+
+            if (!IsUserNameValid(name))
+                return false;
+
+            DataStorage.Users.Add(new User(name, Guid.NewGuid()));
+            return true;
+        }
+
+        internal static bool DeleteUser([NotNull] User user)
+        {
+            if (user == null) 
+                throw new ArgumentNullException(nameof(user));
+
+            DataStorage.Users.Remove(user);
+            return true;
+        }
+
+        internal static bool RenameUser([NotNull] User user, [NotNull] string newName)
+        {
+            if (user == null) 
+                throw new ArgumentNullException(nameof(user));
+
+            if (newName == null) 
+                throw new ArgumentNullException(nameof(newName));
+            
+            if (!IsUserNameValid(newName))
+                return false;
+
+            user.Name = newName;
+            return true;
+        }
+
+        private static bool IsUserNameValid(string name)
+        {
+            return !HasUserWithName(name) && name.Length <= 16;
+        }
+
         internal static void SaveData()
         {
-            File.WriteAllText(DataPath, JsonConvert.SerializeObject(DataStorage), Encoding.UTF8);
+            File.WriteAllText(DataPath, JsonConvert.SerializeObject(DataStorage, Formatting.Indented), Encoding.UTF8);
         }
 
         private static DataStorage SaveDefaultData()

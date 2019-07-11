@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using Ssyp.Communicator.CommonClient;
 
 namespace Ssyp.Communicator.ClientXaml
 {
@@ -7,6 +8,12 @@ namespace Ssyp.Communicator.ClientXaml
         public MainWindow()
         {
             InitializeComponent();
+
+            var messageSyncing = MessageSyncing.StartMessageSyncing(
+                () => { },
+                it => { });
+
+            Closed += (sender, args) => { messageSyncing.Abort(); };
         }
     }
 }

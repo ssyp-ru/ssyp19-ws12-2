@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Ssyp.Communicator.Api.Storage;
 using Ssyp.Communicator.Common.Requests;
 using Ssyp.Communicator.Common.Utilities;
@@ -14,27 +15,28 @@ namespace Ssyp.Communicator.Api.Controllers
         [HttpPost]
         public IActionResult Post()
         {
-            var invalidResult =
-                this.VerifyRequest<ConversationSendRequest>(out var request, out var apiKey);
+            Program.Logger.LogDebug("Handling conversation/send request");
+            var invalidResult = this.ProcessRequest<ConversationSendRequest>(out var request, out var apiKey);
+            Program.Logger.LogDebug($"Parsed the request. Request: {request}");
 
             if (invalidResult != null)
                 return invalidResult;
 
             Debug.Assert(request != null, nameof(request) + " != null");
             var sender = Program.GetUserByApiKey(apiKey);
-            var receiver = Program.GetUserByName(request.Receiver);
+            var receiverName = request.Receiver;
+            var receiver = Program.GetUserByName(receiverName);
 
             if (receiver == null)
-                return BadRequest();
+                return BadRequest($"User {receiverName} can't be found");
 
             Debug.Assert(Program.DataStorage != null, "Program.DataStorage != null");
 
-            var conversation =
-                Program.DataStorage.Conversations.Find(it =>
-                {
-                    Debug.Assert(sender != null, nameof(sender) + " != null");
-                    return it.ContainsUser(sender) && it.ContainsUser(receiver);
-                });
+            var conversation = Program.DataStorage.Conversations.Find(it =>
+            {
+                Debug.Assert(sender != null, nameof(sender) + " != null");
+                return it.ContainsUser(sender) && it.ContainsUser(receiver);
+            });
 
             if (conversation == null)
             {
