@@ -45,12 +45,18 @@ namespace Ssyp.Communicator.CommonClient
         }
 
         [NotNull]
-        public static async Task<bool> RequestConversionSend([NotNull] string receiver, [NotNull] string message)
+        public static async Task<bool> RequestConversationSend([NotNull] string receiver, [NotNull] string message)
         {
+            if (receiver == null)
+                throw new ArgumentNullException(nameof(receiver));
+
+            if (message == null)
+                throw new ArgumentNullException(nameof(message));
+
             return (await Client
                     .PostAsync(
                         $"{ApiUriBase}conversation/send",
-                        new ConversationSendRequest(ApiKey, receiver, message).CreateContent()))
+                        new ConversationSendRequest(ApiKey, message, receiver).CreateContent()))
                 .IsSuccessStatusCode;
         }
 
@@ -69,7 +75,7 @@ namespace Ssyp.Communicator.CommonClient
         {
             if (request == null)
                 throw new ArgumentNullException(nameof(request));
-            
+
             return new StringContent(
                 JsonConvert.SerializeObject(request),
                 Encoding.UTF8,

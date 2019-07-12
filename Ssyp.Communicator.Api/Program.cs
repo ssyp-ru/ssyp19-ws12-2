@@ -23,7 +23,7 @@ namespace Ssyp.Communicator.Api
         internal static ILogger Logger => Host?.Services.GetRequiredService<ILogger<Program>>() ??
                                           throw new Exception("Logger accessed before Host was initialized");
 
-        [NotNull] private static string DataPath => "C:/Users/Sergei/Data.json";
+        [NotNull] private static string DataPath => "C:/Users/Commander Tvis/Data.json";
 
         [CanBeNull]
         internal static User GetUserByApiKey(Guid apiKey)
@@ -42,7 +42,7 @@ namespace Ssyp.Communicator.Api
             return DataStorage.Users.Find(it => it.Name == name);
         }
 
-        internal static bool HasUserWithName([NotNull] string name)
+        private static bool HasUserWithName([NotNull] string name)
         {
             if (name == null)
                 throw new ArgumentNullException(nameof(name));
@@ -57,7 +57,7 @@ namespace Ssyp.Communicator.Api
 
         internal static bool AddUser([NotNull] string name)
         {
-            if (name == null) 
+            if (name == null)
                 throw new ArgumentNullException(nameof(name));
 
             if (!IsUserNameValid(name))
@@ -69,7 +69,7 @@ namespace Ssyp.Communicator.Api
 
         internal static bool DeleteUser([NotNull] User user)
         {
-            if (user == null) 
+            if (user == null)
                 throw new ArgumentNullException(nameof(user));
 
             DataStorage.Users.Remove(user);
@@ -78,12 +78,12 @@ namespace Ssyp.Communicator.Api
 
         internal static bool RenameUser([NotNull] User user, [NotNull] string newName)
         {
-            if (user == null) 
+            if (user == null)
                 throw new ArgumentNullException(nameof(user));
 
-            if (newName == null) 
+            if (newName == null)
                 throw new ArgumentNullException(nameof(newName));
-            
+
             if (!IsUserNameValid(newName))
                 return false;
 
@@ -93,7 +93,7 @@ namespace Ssyp.Communicator.Api
 
         private static bool IsUserNameValid(string name)
         {
-            return !HasUserWithName(name) && name.Length <= 16;
+            return !HasUserWithName(name) && name.Length != 0 && name.Length <= 16 && !name.Contains(" ");
         }
 
         internal static void SaveData()

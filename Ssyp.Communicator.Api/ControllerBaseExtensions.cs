@@ -1,6 +1,5 @@
 using System;
 using System.IO;
-using System.Linq;
 using System.Net.Mime;
 using System.Text;
 using JetBrains.Annotations;
@@ -89,8 +88,7 @@ namespace Ssyp.Communicator.Api
                 throw new ArgumentNullException(nameof(headerDictionary));
 
             var contentType = headerDictionary[HeaderNames.ContentType][0];
-            Program.Logger.LogCritical(contentType);
-            
+
             return contentType.Contains(Encoding.UTF8.WebName, StringComparison.OrdinalIgnoreCase) &&
                    contentType.Contains(MediaTypeNames.Application.Json, StringComparison.OrdinalIgnoreCase);
         }

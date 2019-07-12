@@ -5,21 +5,42 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Ssyp.Communicator.ClientXaml"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Ssyp.Communicator"
+        Height="650"
+        Width="830"
+        Background="White"
+        ResizeMode="NoResize">
 
-    <DockPanel Uid="Root">
-        <StackPanel Orientation="Vertical" Name="CurrentConversation">
-            <StackPanel Orientation="Vertical" Name="Messages" />
+    <StackPanel Orientation="Horizontal" Width="800px" Height="600px">
+        <StackPanel Orientation="Vertical" Width="600px" Height="600px">
+            <StackPanel
+                Orientation="Vertical"
+                Name="Messages"
+                Width="600px"
+                Height="550px"
+                CanVerticallyScroll="True"
+                SelectiveScrollingGrid.SelectiveScrollingOrientation="Vertical"/>
 
-            <StackPanel Orientation="Horizontal">
-                <TextBox Name="MessageToSend" />
-                <Button Name="SendButton">Send</Button>
+            <StackPanel Orientation="Horizontal" Width="600px" Height="50px">
+                <TextBox Name="MessageToSend" FontFamily="Segoe UI" Padding="5px" FontSize="20px" Width="500px">
+                    Hello!
+                </TextBox>
+                <Button Name="SendButton" FontFamily="Segoe UI" FontSize="20px" Width="100px">Send</Button>
             </StackPanel>
         </StackPanel>
 
-        <StackPanel Orientation="Vertical" Uid="Conversations">
-            <TextBox Name="NickToComposeTo" />
-            <Button Name="ComposeButton">Compose</Button>
+        <StackPanel Orientation="Vertical" Width="200px" Height="600px">
+            <TextBox FontFamily="Segoe UI" FontSize="20px" Name="Nickname" Width="200px" Height="50px" />
+            <StackPanel Height="450px" Width="200px" Name="ConversationsList" CanVerticallyScroll="True" />
+
+            <TextBox FontFamily="Segoe UI"
+                     FontSize="20px"
+                     Padding="5px"
+                     Name="NickToComposeTo"
+                     Width="200px"
+                     Height="50px" />
+
+            <Button FontFamily="Segoe UI" FontSize="20px" Name="ComposeButton" Width="200px" Height="50px">Compose</Button>
         </StackPanel>
-    </DockPanel>
+    </StackPanel>
 </Window>

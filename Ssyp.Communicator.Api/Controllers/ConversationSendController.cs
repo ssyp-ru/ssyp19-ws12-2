@@ -46,7 +46,7 @@ namespace Ssyp.Communicator.Api.Controllers
             }
 
             Debug.Assert(sender != null, nameof(sender) + " != null");
-            conversation.Messages.Add(new Message(sender, TimeUtilities.CurrentTimeMillis(), request.Message));
+            conversation.Messages.Add(new Message(sender.Name, TimeUtilities.CurrentTimeMillis(), request.Message));
             Program.SaveData();
             return Ok();
         }

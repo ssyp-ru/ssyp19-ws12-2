@@ -27,7 +27,7 @@ namespace Ssyp.Communicator.Api.Controllers
                 .Where(c =>
                 {
                     Debug.Assert(request != null, nameof(request) + " != null");
-      
+
                     return Program.GetUserByName(c.First)?.ApiKey == apiKey ||
                            Program.GetUserByName(c.Second)?.ApiKey == apiKey;
                 })
@@ -43,8 +43,14 @@ namespace Ssyp.Communicator.Api.Controllers
                             : Program.GetUserByName(c.Second))?.Name.ToString(),
                         c.Messages
                             .Select(m =>
-                                new ConversationListResponse.Conversation.Message(m.Sender.Name.ToString(), m.Value,
-                                    m.TimeStamp))
+                            {
+                                var sender = Program.GetUserByName(m.Sender);
+
+                                Debug.Assert(sender != null, nameof(sender) + " != null");
+                                return new ConversationListResponse.Conversation.Message(sender.Name.ToString(),
+                                    m.Value,
+                                    m.TimeStamp);
+                            })
                             .ToList());
                 })
                 .ToList());
