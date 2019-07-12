@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 using JetBrains.Annotations;
 using Ssyp.Communicator.CommonClient;
@@ -16,6 +17,9 @@ namespace Ssyp.Communicator.ClientXaml
             InitializeMessageSyncing();
             Task.Run(DisplayNickname);
             ComposeButton.Click += (sender, args) => { CurrentInterlocutor = NickToComposeTo.Text; };
+
+            var sb = new ScrollBar();
+            sb.Orientation = Orientation.Vertical;
 
             SendButton.Click += (sender, args) =>
             {
@@ -55,7 +59,7 @@ namespace Ssyp.Communicator.ClientXaml
                         var button = new Button
                         {
                             Content = it.Interlocutor,
-                            Width = 200,
+                            Width = 182,
                             Height = 50,
                             FontFamily = new FontFamily("Segoe UI"),
                             FontSize = 20
