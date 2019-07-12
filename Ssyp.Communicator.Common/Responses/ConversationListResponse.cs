@@ -14,7 +14,7 @@ namespace Ssyp.Communicator.Common.Responses
 
         [NotNull]
         public override string ToString() =>
-            $"${nameof(ConversationListResponse)}({nameof(Conversations)}={Conversations})";
+            $"{nameof(ConversationListResponse)}({nameof(Conversations)}={Conversations})";
 
         [Serializable]
         public sealed class Conversation
