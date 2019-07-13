@@ -7,6 +7,17 @@ namespace Ssyp.Communicator.Api.Storage
     [Serializable]
     internal sealed class Conversation
     {
+        public Conversation([NotNull] string first, [NotNull] string second, [NotNull] List<Message> messages)
+        {
+            First = first ?? throw new ArgumentNullException(nameof(first));
+            Second = second ?? throw new ArgumentNullException(nameof(second));
+            Messages = messages ?? throw new ArgumentNullException(nameof(messages));
+        }
+
+        [NotNull] public string First { get; set; }
+        [NotNull] public string Second { get; set; }
+        [NotNull] public IList<Message> Messages { get; set; }
+
         private bool Equals([CanBeNull] Conversation other)
         {
             return other != null && string.Equals(First, other.First) && string.Equals(Second, other.Second);
@@ -24,17 +35,6 @@ namespace Ssyp.Communicator.Api.Storage
                 return (First.GetHashCode() * 397) ^ Second.GetHashCode();
             }
         }
-
-        public Conversation([NotNull] string first, [NotNull] string second, [NotNull] List<Message> messages)
-        {
-            First = first ?? throw new ArgumentNullException(nameof(first));
-            Second = second ?? throw new ArgumentNullException(nameof(second));
-            Messages = messages ?? throw new ArgumentNullException(nameof(messages));
-        }
-
-        [NotNull] public string First { get; }
-        [NotNull] public string Second { get; }
-        [NotNull] public IList<Message> Messages { get; set; }
 
         [NotNull]
         public override string ToString()

@@ -11,8 +11,6 @@
         ResizeMode="NoResize"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
-        TextElement.FontWeight="Regular"
-        TextElement.FontSize="13"
         TextOptions.TextFormattingMode="Ideal"
         TextOptions.TextRenderingMode="Auto"
         Background="{DynamicResource MaterialDesignPaper}"
@@ -30,7 +28,7 @@
             </ScrollViewer>
 
             <StackPanel Orientation="Horizontal" Width="600px" Height="50px">
-                <TextBox Name="MessageToSend" FontFamily="Segoe UI" Padding="5px" FontSize="20px" Width="500px">
+                <TextBox Name="MessageToSend" FontFamily="Segoe UI" Padding="5px" FontSize="15px" Width="500px">
                     Hello!
                 </TextBox>
                 <Button Name="SendButton" FontFamily="Segoe UI" FontSize="20px" Height="50px" Width="100px">Send</Button>
@@ -38,14 +36,14 @@
         </StackPanel>
 
         <StackPanel Orientation="Vertical" Width="200px" Height="600px">
-            <TextBox FontFamily="Segoe UI" FontSize="20px" Name="Nickname" Width="200px" Height="50px" />
+            <TextBox FontFamily="Segoe UI" FontSize="15px" Name="Nickname" Width="200px" Height="50px" />
 
             <ScrollViewer Height="450px" Width="200px">
                 <StackPanel Width="182px" Name="ConversationsList" CanVerticallyScroll="True" />
             </ScrollViewer>
 
             <TextBox FontFamily="Segoe UI"
-                     FontSize="20px"
+                     FontSize="15px"
                      Padding="5px"
                      Name="NickToComposeTo"
                      Width="200px"

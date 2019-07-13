@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Text;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Hosting;
@@ -23,7 +24,7 @@ namespace Ssyp.Communicator.Api
         internal static ILogger Logger => Host?.Services.GetRequiredService<ILogger<Program>>() ??
                                           throw new Exception("Logger accessed before Host was initialized");
 
-        [NotNull] private static string DataPath => "C:/Users/Commander Tvis/Data.json";
+        [NotNull] private static string DataPath { get; set; }
 
         [CanBeNull]
         internal static User GetUserByApiKey(Guid apiKey)
@@ -87,7 +88,29 @@ namespace Ssyp.Communicator.Api
             if (!IsUserNameValid(newName))
                 return false;
 
+            DataStorage
+                .Conversations
+                .Where(c => c.ContainsUser(user))
+                .Select(it =>
+                {
+                    if (it.First == user.Name)
+                        it.First = newName;
+
+                    if (it.Second == user.Name)
+                        it.Second = newName;
+
+                    return it;
+                })
+                .SelectMany(it => it.Messages)
+                .ToList()
+                .ForEach(it =>
+                {
+                    if (it.Sender == (string) user.Name.Clone())
+                        it.Sender = newName;
+                });
+
             user.Name = newName;
+
             return true;
         }
 
@@ -107,9 +130,6 @@ namespace Ssyp.Communicator.Api
                 new List<Conversation>(),
                 new List<User>
                 {
-                    new User(
-                        "Haimuke",
-                        Guid.Parse("12D5A4A4-F225-4245-A2E5-EA76AB042712"))
                 });
 
             SaveData();
@@ -137,6 +157,11 @@ namespace Ssyp.Communicator.Api
         {
             if (args == null)
                 throw new ArgumentNullException(nameof(args));
+
+            if (args.Length == 0)
+                throw new Exception("Configure the data path!");
+
+            DataPath = args[0];
 
             Host = new WebHostBuilder()
                 .UseKestrel()
